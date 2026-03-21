@@ -1,7 +1,7 @@
 {
   "name": "serbian-football",
-  "version": "1.0.0",
-  "description": "Serbian football automation",
+  "version": "2.0.0",
+  "description": "Serbian football automation with API + Telegram",
   "main": "index.js",
   "scripts": {
     "deploy": "wrangler deploy"

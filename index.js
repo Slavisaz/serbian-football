@@ -1,22 +1,30 @@
 export default {
   async fetch(request) {
-    return new Response(JSON.stringify({
-      name: "Serbian Football API",
-      status: "running",
-      message: "⚽ Serbian football automation is live!"
-    }), {
+    const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev");
+    const data = await res.text();
+
+    return new Response(data, {
       headers: { "content-type": "application/json" },
     });
   },
 
   async scheduled(event, env, ctx) {
-    console.log("Running scheduled task...");
+    console.log("Running automation...");
 
-    const data = {
-      league: "Serbian SuperLiga",
-      update: "Daily update working ⚽"
-    };
+    const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev");
+    const data = await res.text();
 
-    console.log("Data:", data);
+    console.log("Fetched data:", data);
+
+    // TODO: Send to Telegram
+    // Example:
+    // await fetch(`https://api.telegram.org/botYOUR_TOKEN/sendMessage`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     chat_id: "YOUR_CHAT_ID",
+    //     text: data
+    //   })
+    // });
   }
 };

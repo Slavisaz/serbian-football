@@ -1,11 +1,10 @@
-# Serbian Football ⚽
-
-Automated Serbian football updates using Cloudflare Workers.
+# Serbian Football ⚽ (Automation)
 
 ## Features
-- Live API
-- Scheduled updates
-- Automation ready
+- Live API connection
+- Scheduled automation (every 30 min)
+- Ready for Telegram bot integration
 
-## Deploy
-Using Cloudflare Workers + GitHub
+## Next Steps
+- Add Telegram bot token
+- Customize message format
