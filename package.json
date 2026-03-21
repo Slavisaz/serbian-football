@@ -1,0 +1,9 @@
+{
+  "name": "serbian-football",
+  "version": "1.0.0",
+  "description": "Serbian football automation",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  }
+}
