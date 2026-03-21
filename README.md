@@ -1,10 +1,10 @@
-# Serbian Football ⚽ (Automation)
+# Serbian Football ⚽ (Fixed Version)
 
 ## Features
-- Live API connection
-- Scheduled automation (every 30 min)
-- Ready for Telegram bot integration
+- Connects to superliga-api
+- Fixed Cloudflare fetch issue (1042)
+- Scheduled automation
 
-## Next Steps
-- Add Telegram bot token
-- Customize message format
+## Ready for:
+- Telegram bot
+- Match automation

@@ -1,30 +1,26 @@
 export default {
   async fetch(request) {
-    const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev");
-    const data = await res.text();
+    try {
+      const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev/", {
+        method: "GET",
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+          "Accept": "application/json"
+        },
+        cf: {
+          cacheTtl: 0,
+          cacheEverything: false
+        }
+      });
 
-    return new Response(data, {
-      headers: { "content-type": "application/json" },
-    });
-  },
+      const text = await res.text();
 
-  async scheduled(event, env, ctx) {
-    console.log("Running automation...");
+      return new Response(text, {
+        headers: { "content-type": "application/json" },
+      });
 
-    const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev");
-    const data = await res.text();
-
-    console.log("Fetched data:", data);
-
-    // TODO: Send to Telegram
-    // Example:
-    // await fetch(`https://api.telegram.org/botYOUR_TOKEN/sendMessage`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     chat_id: "YOUR_CHAT_ID",
-    //     text: data
-    //   })
-    // });
+    } catch (err) {
+      return new Response("Fetch error: " + err.message);
+    }
   }
 };
