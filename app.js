@@ -8,23 +8,29 @@ async function loadNews() {
   const leadSource = document.querySelector(".lead-source");
   const newsGrid = document.querySelector("#newsGrid");
 
-  if (Array.isArray(data) && data.length > 0) {
-    leadTitle.textContent = data[0].title;
-    leadSource.textContent = data[0].source || "Source unavailable";
-  } else {
-    leadTitle.textContent = "No top story available";
-    leadSource.textContent = "";
+  if (!Array.isArray(data) || !data.length) {
+    leadTitle.textContent = "No live news available";
+    leadSource.textContent = "Official source not connected yet";
+    newsGrid.innerHTML = `
+      <article class="news-card">
+        <h3>No additional news</h3>
+        <p>Connect a real source to show live headlines.</p>
+      </article>
+    `;
+    return;
   }
+
+  leadTitle.textContent = data[0].title;
+  leadSource.textContent = data[0].source || "Source unavailable";
 
   newsGrid.innerHTML = "";
 
-  const rest = Array.isArray(data) ? data.slice(1) : [];
-
+  const rest = data.slice(1);
   if (!rest.length) {
     newsGrid.innerHTML = `
       <article class="news-card">
-        <h3>No additional news yet</h3>
-        <p>More stories will appear here.</p>
+        <h3>No additional news</h3>
+        <p>Only one live story is available right now.</p>
       </article>
     `;
     return;
@@ -49,7 +55,7 @@ async function loadStandings() {
   body.innerHTML = "";
 
   if (!Array.isArray(data) || !data.length) {
-    body.innerHTML = `<tr><td colspan="3">No standings available</td></tr>`;
+    body.innerHTML = `<tr><td colspan="3">No live standings available</td></tr>`;
     return;
   }
 
@@ -71,7 +77,7 @@ async function loadVideos() {
   const shell = document.querySelector("#videoShell");
 
   if (!Array.isArray(data) || !data.length || !data[0].id) {
-    shell.textContent = "No video available";
+    shell.innerHTML = `<div style="padding:24px;">No live video available</div>`;
     return;
   }
 
