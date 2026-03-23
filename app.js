@@ -1,4 +1,4 @@
-const API = "https://serbian-football.slavisa-cf8.workers.dev";
+const API = "https://wild-shape-c68f.slavisa-cf8.workers.dev";
 
 // NEWS
 async function loadNews() {
