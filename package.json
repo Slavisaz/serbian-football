@@ -1,7 +1,0 @@
-{
-  "name": "portal",
-  "type": "module",
-  "scripts": {
-    "deploy": "wrangler deploy"
-  }
-}
