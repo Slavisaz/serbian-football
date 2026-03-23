@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serbian Football</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 30px 15px;
+    }
+    h1 {
+      margin-bottom: 24px;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1b1b1b;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background: #222;
+    }
+    .muted {
+      color: #aaa;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Serbian SuperLiga Standings</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Data endpoint: <code>/api/standings</code></p>
+  </div>
+
+  <script>
+    async function loadStandings() {
+      const tbody = document.getElementById('table-body');
+      try {
+        const res = await fetch('/api/standings');
+        if (!res.ok) throw new Error('Request failed');
+        const data = await res.json();
+        tbody.innerHTML = '';
+        data.standings.forEach(team => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${team.position}</td>
+            <td>${team.team}</td>
+            <td>${team.points}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        tbody.innerHTML = '<tr><td colspan="3">Could not load standings.</td></tr>';
+      }
+    }
+
+    loadStandings();
+  </script>
+</body>
+</html>
