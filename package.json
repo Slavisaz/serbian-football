@@ -1,9 +1,5 @@
 {
   "name": "serbian-football",
-  "version": "2.1.0",
-  "description": "Serbian football automation (fixed fetch)",
-  "main": "index.js",
-  "scripts": {
-    "deploy": "wrangler deploy"
-  }
+  "version": "1.0.0",
+  "private": true
 }

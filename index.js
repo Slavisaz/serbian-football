@@ -1,26 +1,17 @@
 export default {
   async fetch(request) {
-    try {
-      const res = await fetch("https://superliga-api.slavisa-cf8.workers.dev/", {
-        method: "GET",
-        headers: {
-          "User-Agent": "Mozilla/5.0",
-          "Accept": "application/json"
-        },
-        cf: {
-          cacheTtl: 0,
-          cacheEverything: false
-        }
-      });
+    const data = {
+      league: "Serbian SuperLiga",
+      season: "2025",
+      teams: [
+        { name: "Crvena Zvezda", city: "Belgrade" },
+        { name: "Partizan", city: "Belgrade" },
+        { name: "Vojvodina", city: "Novi Sad" }
+      ]
+    };
 
-      const text = await res.text();
-
-      return new Response(text, {
-        headers: { "content-type": "application/json" },
-      });
-
-    } catch (err) {
-      return new Response("Fetch error: " + err.message);
-    }
+    return new Response(JSON.stringify(data, null, 2), {
+      headers: { "content-type": "application/json" }
+    });
   }
 };
