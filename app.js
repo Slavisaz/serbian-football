@@ -10,18 +10,18 @@ async function loadNews() {
 
   if (!Array.isArray(data) || !data.length) {
     leadTitle.textContent = "No live news available";
-    leadSource.textContent = "Official source not connected yet";
+    leadSource.textContent = "Official source unavailable";
     newsGrid.innerHTML = `
       <article class="news-card">
         <h3>No additional news</h3>
-        <p>Connect a real source to show live headlines.</p>
+        <p>Official headlines will appear here.</p>
       </article>
     `;
     return;
   }
 
-  leadTitle.textContent = data[0].title;
-  leadSource.textContent = data[0].source || "Source unavailable";
+  leadTitle.innerHTML = `<a href="${data[0].url}" target="_blank" rel="noopener noreferrer">${data[0].title}</a>`;
+  leadSource.textContent = data[0].source || "Official source";
 
   newsGrid.innerHTML = "";
 
@@ -30,7 +30,7 @@ async function loadNews() {
     newsGrid.innerHTML = `
       <article class="news-card">
         <h3>No additional news</h3>
-        <p>Only one live story is available right now.</p>
+        <p>Only one official headline is available right now.</p>
       </article>
     `;
     return;
@@ -40,8 +40,8 @@ async function loadNews() {
     const card = document.createElement("article");
     card.className = "news-card";
     card.innerHTML = `
-      <h3>${item.title}</h3>
-      <p>${item.source || "Source unavailable"}</p>
+      <h3><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
+      <p>${item.source || "Official source"}</p>
     `;
     newsGrid.appendChild(card);
   });
@@ -59,10 +59,10 @@ async function loadStandings() {
     return;
   }
 
-  data.forEach((team, index) => {
+  data.forEach(team => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${index + 1}</td>
+      <td>${team.position}</td>
       <td>${team.team}</td>
       <td>${team.points}</td>
     `;
@@ -77,14 +77,14 @@ async function loadVideos() {
   const shell = document.querySelector("#videoShell");
 
   if (!Array.isArray(data) || !data.length || !data[0].id) {
-    shell.innerHTML = `<div style="padding:24px;">No live video available</div>`;
+    shell.innerHTML = `<div style="padding:24px;">No live official video available</div>`;
     return;
   }
 
   shell.innerHTML = `
     <iframe
       src="https://www.youtube.com/embed/${data[0].id}"
-      title="Serbian Football Video"
+      title="Official Serbian Football Video"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen>
     </iframe>
@@ -93,11 +93,7 @@ async function loadVideos() {
 
 async function init() {
   try {
-    await Promise.all([
-      loadNews(),
-      loadStandings(),
-      loadVideos()
-    ]);
+    await Promise.all([loadNews(), loadStandings(), loadVideos()]);
   } catch (err) {
     console.error("Portal load error:", err);
   }
