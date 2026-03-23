@@ -1,44 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Serbian Football</title>
-<link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Serbian Football</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#">
+        <img src="assets/logo.png" alt="Serbian Football logo" />
+        <span>SERBIAN FOOTBALL</span>
+      </a>
 
-<header>
-<div class="logo">
-<img src="assets/logo.png">
-<span>SERBIAN FOOTBALL</span>
-</div>
-<nav>
-<a href="#">News</a>
-<a href="#">Standings</a>
-<a href="#">Videos</a>
-</nav>
-</header>
+      <nav class="nav">
+        <a href="#news">News</a>
+        <a href="#standings">Standings</a>
+        <a href="#videos">Videos</a>
+      </nav>
+    </div>
+  </header>
 
-<main>
-<section class="top">
-<div class="big">Main News Headline</div>
-<div class="standings-box"><h2>Standings</h2><table></table></div>
-</section>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">SERBIAN FOOTBALL PORTAL</div>
+        <h1>Latest Serbian football news, standings and video</h1>
+        <p>
+          Clean English portal for Serbian football with live API-backed sections.
+        </p>
+      </div>
+      <div class="hero-badges">
+        <div class="badge-card">
+          <span class="badge-label">Source</span>
+          <strong>Cloudflare Worker API</strong>
+        </div>
+        <div class="badge-card">
+          <span class="badge-label">Coverage</span>
+          <strong>News / Standings / Video</strong>
+        </div>
+      </div>
+    </section>
 
-<section class="grid">
-<div class="card">News 1</div>
-<div class="card">News 2</div>
-<div class="card">News 3</div>
-<div class="card">News 4</div>
-</section>
+    <section class="main-layout">
+      <section class="content-column">
+        <section id="news" class="panel panel-news">
+          <div class="panel-head">
+            <h2>Top Story</h2>
+            <span class="panel-tag">NEWS</span>
+          </div>
 
-<section class="video">
-<h2>Videos</h2>
-Video area
-</section>
-</main>
+          <article class="lead-story">
+            <div class="lead-copy">
+              <div class="lead-kicker">Featured</div>
+              <h3 class="lead-title">Loading top story...</h3>
+              <p class="lead-source">Please wait</p>
+            </div>
+          </article>
 
-<script src="app.js"></script>
+          <div class="subgrid" id="newsGrid">
+            <article class="news-card skeleton"></article>
+            <article class="news-card skeleton"></article>
+            <article class="news-card skeleton"></article>
+            <article class="news-card skeleton"></article>
+          </div>
+        </section>
+
+        <section id="videos" class="panel">
+          <div class="panel-head">
+            <h2>Video</h2>
+            <span class="panel-tag">YOUTUBE</span>
+          </div>
+
+          <div class="video-shell" id="videoShell">
+            Loading video...
+          </div>
+        </section>
+      </section>
+
+      <aside class="sidebar-column">
+        <section id="standings" class="panel">
+          <div class="panel-head">
+            <h2>Standings</h2>
+            <span class="panel-tag">TABLE</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="standings-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Club</th>
+                  <th>Pts</th>
+                </tr>
+              </thead>
+              <tbody id="standingsBody">
+                <tr>
+                  <td colspan="3">Loading standings...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="panel small-panel">
+          <div class="panel-head">
+            <h2>Portal Status</h2>
+            <span class="panel-tag">LIVE</span>
+          </div>
+          <div class="status-list">
+            <div class="status-item">
+              <span>Frontend</span>
+              <strong>GitHub + Cloudflare</strong>
+            </div>
+            <div class="status-item">
+              <span>Backend</span>
+              <strong>wild-shape-c68f</strong>
+            </div>
+            <div class="status-item">
+              <span>Theme</span>
+              <strong>Light ESPN Style</strong>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
