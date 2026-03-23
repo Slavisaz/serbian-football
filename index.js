@@ -10,14 +10,12 @@ export default {
       { position: 5, team: "Vojvodina", points: 50 }
     ];
 
-    // API endpoint
     if (url.pathname === "/api") {
       return new Response(JSON.stringify({ standings }, null, 2), {
         headers: { "content-type": "application/json" }
       });
     }
 
-    // Website UI
     return new Response(`<!DOCTYPE html>
 <html>
 <head>
