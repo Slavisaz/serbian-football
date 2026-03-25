@@ -10,13 +10,12 @@ export default {
   }
 };
 
-// REAL RSS (Google News Serbia Football)
 async function getNews() {
-  const rss = await fetch(
+  const res = await fetch(
     "https://news.google.com/rss/search?q=serbian+football&hl=en-US&gl=US&ceid=US:en"
   );
 
-  const xml = await rss.text();
+  const xml = await res.text();
 
   const items = [...xml.matchAll(/<item>(.*?)<\/item>/gs)].slice(0, 11);
 
