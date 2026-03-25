@@ -64,15 +64,13 @@ async function buildNewsFeed() {
     .filter(Boolean);
 
   const official = dedupe(fssItems)
-    .sort((a, b) => b.dateTs - a.dateTs)
-    .slice(0, 3);
+    .sort((a, b) => b.dateTs - a.dateTs);
 
   const media = dedupe(rssItems)
     .sort((a, b) => b.dateTs - a.dateTs)
-    .filter(item => !official.some(o => sameTitle(o.title, item.title)))
-    .slice(0, 2);
+    .filter(item => !official.some(o => sameTitle(o.title, item.title)));
 
-  const merged = [...official, ...media];
+  const merged = [...official, ...media].slice(0, 5);
 
   return merged.map((item, i) => ({
     ...item,
@@ -90,46 +88,21 @@ async function fetchFssMainNews() {
 
     const html = await res.text();
 
-    // Main article cards on FSS News page:
-    // look for H2 headline link + nearby date
-    const matches = [
-      ...html.matchAll(
-        /<h2[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/h2>[\s\S]*?<time[^>]*>([\s\S]*?)<\/time>/gi
-      )
-    ];
+    const blocks = [...html.matchAll(
+      /<h2[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/h2>[\s\S]*?<time[^>]*>([\s\S]*?)<\/time>/gi
+    )];
 
-    const items = matches.map((m) => {
-      const link = absolutizeFssUrl(m[1]);
-      const title = cleanText(stripHtml(m[2]));
-      const dateText = cleanText(stripHtml(m[3]));
-
-      return {
-        title,
-        link,
-        source: "FSS",
-        sourceType: "official",
-        image: null,
-        dateTs: parseFssDate(dateText)
-      };
-    });
-
-    // Fallback if theme markup differs
-    if (!items.length) {
-      const loose = [...html.matchAll(/##\s*【\d+†([^】]+)】[\s\S]*?(\d{2}\.\d{2}\.\d{4}\.)/g)];
-      return loose.slice(0, 3).map((m, i) => ({
-        title: cleanText(m[1]),
-        link: "https://fss.rs/en/news/",
-        source: "FSS",
-        sourceType: "official",
-        image: FALLBACK_IMAGES[i % FALLBACK_IMAGES.length],
-        dateTs: parseFssDate(m[2])
-      }));
-    }
-
-    return items
-      .filter(hasContent)
-      .filter(item => item.dateTs && isRecent(item))
-      .slice(0, 3);
+    return blocks.map((m, i) => ({
+      title: cleanText(stripHtml(m[2])),
+      link: absolutizeFssUrl(m[1]),
+      source: "FSS",
+      sourceType: "official",
+      image: FALLBACK_IMAGES[i % FALLBACK_IMAGES.length],
+      dateTs: parseFssDate(cleanText(stripHtml(m[3])))
+    }))
+    .filter(hasContent)
+    .filter(isRecent)
+    .slice(0, 3);
   } catch {
     return [];
   }
@@ -304,13 +277,4 @@ function normalizeTitle(title) {
 
 function sameTitle(a, b) {
   return normalizeTitle(a) === normalizeTitle(b);
-}
-
-function json(data) {
-  return new Response(JSON.stringify(data), {
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      "cache-control": "public, max-age=300"
-    }
-  });
 }
