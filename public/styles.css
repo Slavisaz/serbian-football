@@ -1,0 +1,26 @@
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f5f6fa;
+}
+.topbar {
+  background: #d90404;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+}
+.container {
+  display: flex;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.breaking {
+  background: red;
+  color: white;
+  padding: 20px;
+}

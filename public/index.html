@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Serbian Football</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">
+    <img src="logo.png" />
+    <span>SERBIAN FOOTBALL</span>
+  </div>
+  <nav>
+    <a href="#">News</a>
+    <a href="#">Standings</a>
+    <a href="#">Results</a>
+    <a href="#">Schedule</a>
+    <a href="#">Videos</a>
+  </nav>
+</header>
+
+<div class="ad">Advertisement</div>
+
+<main class="container">
+  <section class="main-content">
+    <div id="breaking" class="breaking">Loading latest news...</div>
+
+    <div class="card">
+      <h2>SuperLiga Standings</h2>
+      <table id="standings"></table>
+    </div>
+
+    <div class="card">
+      <h2>Latest Videos</h2>
+      <div id="videos" class="videos"></div>
+    </div>
+  </section>
+
+  <aside class="sidebar">
+    <div class="card">
+      <h3>AI Football Agent</h3>
+      <div id="ai-news"></div>
+    </div>
+    <div class="ad small">AdSense</div>
+  </aside>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
