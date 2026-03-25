@@ -6,8 +6,11 @@ async function load() {
 
   document.getElementById("breaking").innerHTML = data[0]?.title || "No news";
 
-  document.getElementById("ai-news").innerHTML =
-    data.map(n => "<p>" + n.title + "</p>").join("");
+  
 }
-
+document.getElementById("ai-news").innerHTML =
+  data.map(n =>
+    `<p><a href="${n.link}" target="_blank">${n.title}</a></p>`
+  ).join("");
 load();
+ 
