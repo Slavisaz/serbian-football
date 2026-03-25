@@ -17,30 +17,39 @@ function timeAgo(ts) {
   return `${Math.floor(diff / 86400)}d ago`;
 }
 
-function storyCard(item) {
+function renderHero(item) {
   return `
-    <article class="story">
-      <div class="story-thumb">
-        <img src="${esc(item.image)}" alt="${esc(item.title)}" loading="lazy">
+    <div class="hero-card">
+      <img src="${esc(item.image)}" class="hero-img" alt="${esc(item.title)}">
+      <div class="hero-overlay">
+        <span class="badge">LATEST NEWS</span>
+        <h1>${esc(item.title)}</h1>
+        <p>${esc(item.source)} · ${esc(timeAgo(item.dateTs))}</p>
       </div>
-      <div class="story-body">
-        <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a>
-        <div class="story-meta">
-          <span class="story-badge">Media</span>
-          ${esc(item.source)} · ${esc(timeAgo(item.dateTs))}
-        </div>
-      </div>
-    </article>
+    </div>
   `;
 }
 
-async function loadNews() {
-  const hero = document.getElementById("hero-content");
-  const aiNews = document.getElementById("ai-news");
-  const topNews = document.getElementById("top-news");
+function renderNewsItem(item) {
+  return `
+    <div class="news-item">
+      <img src="${esc(item.image)}" alt="${esc(item.title)}" />
+      <div>
+        <div class="news-title">
+          <a href="${esc(item.link)}" target="_blank" rel="noopener noreferrer">${esc(item.title)}</a>
+        </div>
+        <div class="news-meta">${esc(item.source)} · ${esc(timeAgo(item.dateTs))}</div>
+      </div>
+    </div>
+  `;
+}
 
-  if (!hero || !aiNews || !topNews) {
-    console.error("Missing required page elements: hero-content / ai-news / top-news");
+async function render() {
+  const hero = document.getElementById("hero");
+  const sidebar = document.getElementById("news-list");
+
+  if (!hero || !sidebar) {
+    console.error("Missing #hero or #news-list in index.html");
     return;
   }
 
@@ -55,41 +64,35 @@ async function loadNews() {
 
     if (!Array.isArray(news) || news.length === 0) {
       hero.innerHTML = `
-        <h1 class="hero-title">No Serbian football stories available right now</h1>
-        <div class="hero-meta">Please check back later</div>
+        <div class="hero-card">
+          <div class="hero-overlay">
+            <span class="badge">LATEST NEWS</span>
+            <h1>No Serbian football stories available right now</h1>
+            <p>Please check back later</p>
+          </div>
+        </div>
       `;
-      aiNews.innerHTML = `<div class="panel-body empty">No stories available.</div>`;
-      topNews.innerHTML = `<div class="panel-body empty">No stories available.</div>`;
+      sidebar.innerHTML = `<p>No stories available.</p>`;
       return;
     }
 
-    const first = news[0];
-
-    hero.innerHTML = `
-      <h1 class="hero-title">${esc(first.title)}</h1>
-      <div class="hero-meta">${esc(first.source)} · ${esc(timeAgo(first.dateTs))}</div>
-    `;
-
-    aiNews.innerHTML = news
-      .slice(0, 3)
-      .map(storyCard)
-      .join("");
-
-    topNews.innerHTML = news
-      .slice(3, 5)
-      .map(storyCard)
-      .join("") || `<div class="panel-body empty">More stories soon.</div>`;
+    hero.innerHTML = renderHero(news[0]);
+    sidebar.innerHTML = news.map(renderNewsItem).join("");
   } catch (err) {
     console.error(err);
 
     hero.innerHTML = `
-      <h1 class="hero-title">Error loading Serbian football news</h1>
-      <div class="hero-meta">Please refresh the page</div>
+      <div class="hero-card">
+        <div class="hero-overlay">
+          <span class="badge">LATEST NEWS</span>
+          <h1>Error loading Serbian football news</h1>
+          <p>Please refresh the page</p>
+        </div>
+      </div>
     `;
-    aiNews.innerHTML = `<div class="panel-body empty">Feed error.</div>`;
-    topNews.innerHTML = `<div class="panel-body empty">Feed error.</div>`;
+    sidebar.innerHTML = `<p>Feed error.</p>`;
   }
 }
 
-loadNews();
-setInterval(loadNews, 300000);
+render();
+setInterval(render, 300000);
