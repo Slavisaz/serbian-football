@@ -1,35 +1,47 @@
 async function load() {
   try {
-    const res = await fetch("/api/news");
-    const news = await res.json();
+    const news = await fetch("/api/news").then(r => r.json());
 
-    console.log(news); // debug
+    const hero = document.getElementById("hero");
+    const aiNews = document.getElementById("ai-news");
+    const topNews = document.getElementById("top-news");
 
-    if (!news || news.length === 0) {
-      document.getElementById("hero").innerText =
-  news[0]?.title.replace(" - ", " | ");
+    if (!news.length) {
+      hero.innerHTML = "No fresh Serbian football news right now";
+      aiNews.innerHTML = "<p>No items available.</p>";
+      topNews.innerHTML = "<p>No items available.</p>";
       return;
     }
 
-    // HERO
-    document.getElementById("hero").innerText = news[0].title;
+    hero.innerHTML = `
+      <div>
+        <div class="hero-kicker">${news[0].sourceType === "official" ? "OFFICIAL" : "LATEST NEWS"}</div>
+        <div class="hero-title">${news[0].title}</div>
+        <div class="hero-meta">${news[0].source} · ${news[0].ageHours ?? "?"}h ago</div>
+      </div>
+    `;
 
-    // AI NEWS
-    document.getElementById("ai-news").innerHTML =
-      news.slice(0, 5).map(n =>
-        `<p><a href="${n.link}" target="_blank">${n.title}</a></p>`
-      ).join("");
+    aiNews.innerHTML = news.slice(0, 5).map(n => `
+      <article class="story">
+        <a href="${n.link}" target="_blank" rel="noopener noreferrer">${n.title}</a>
+        <div class="story-meta">${n.source} · ${n.ageHours ?? "?"}h ago</div>
+      </article>
+    `).join("");
 
-    // TOP STORIES
-    document.getElementById("top-news").innerHTML =
-      news.slice(5, 11).map(n =>
-        `<p><a href="${n.link}" target="_blank">${n.title}</a></p>`
-      ).join("");
+    topNews.innerHTML = news.slice(5, 11).map(n => `
+      <article class="story">
+        <a href="${n.link}" target="_blank" rel="noopener noreferrer">${n.title}</a>
+        <div class="story-meta">${n.source} · ${n.ageHours ?? "?"}h ago</div>
+      </article>
+    `).join("");
 
-  } catch (e) {
-    document.getElementById("hero").innerText = "Error loading news";
-    console.error(e);
+  } catch (err) {
+    document.getElementById("hero").innerHTML = "Error loading news";
+    document.getElementById("ai-news").innerHTML = "<p>Feed error.</p>";
+    document.getElementById("top-news").innerHTML = "<p>Feed error.</p>";
+    console.error(err);
   }
 }
 
 load();
+setInterval(load, 300000);
