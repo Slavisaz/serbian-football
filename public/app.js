@@ -90,7 +90,7 @@ async function render() {
         </div>
       </div>
     `;
-    sidebar.innerHTML = `<p>Feed error.</p>`;
+    sidebar.innerHTML = `<p>No stories available.</p>`;
   }
 }
 
