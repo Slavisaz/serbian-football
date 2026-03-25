@@ -6,7 +6,8 @@ async function load() {
     console.log(news); // debug
 
     if (!news || news.length === 0) {
-      document.getElementById("hero").innerText = "No news available";
+      document.getElementById("hero").innerText =
+  news[0]?.title.replace(" - ", " | ");
       return;
     }
 
