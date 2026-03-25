@@ -7,44 +7,78 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
 <header class="topbar">
   <div class="logo">
-    <img src="logo.png" />
-    <span>SERBIAN FOOTBALL</span>
+    <img src="logo.jfif" />
+    <span>SERBIAN <b>FOOTBALL</b></span>
   </div>
+
   <nav>
-    <a href="#">News</a>
-    <a href="#">Standings</a>
-    <a href="#">Results</a>
-    <a href="#">Schedule</a>
-    <a href="#">Videos</a>
+    <a>News</a>
+    <a>Standings</a>
+    <a>Results</a>
+    <a>Schedule</a>
+    <a>Videos</a>
   </nav>
 </header>
 
-<div class="ad">Advertisement</div>
+<div class="ad">ADVERTISEMENT</div>
 
-<main class="container">
-  <section class="main-content">
-    <div id="breaking" class="breaking">Loading latest news...</div>
+<main class="layout">
 
+  <!-- LEFT SIDE -->
+  <section>
+
+    <!-- HERO -->
+    <div id="hero" class="hero">
+      Loading headline...
+    </div>
+
+    <!-- STANDINGS -->
     <div class="card">
-      <h2>SuperLiga Standings</h2>
+      <h2>Serbian SuperLiga</h2>
       <table id="standings"></table>
     </div>
 
+    <!-- RESULTS + MATCHES -->
+    <div class="grid-2">
+      <div class="card">
+        <h3>Recent Results</h3>
+        <div id="results"></div>
+      </div>
+
+      <div class="card">
+        <h3>Upcoming Matches</h3>
+        <div id="matches"></div>
+      </div>
+    </div>
+
+    <!-- VIDEOS -->
     <div class="card">
       <h2>Latest Videos</h2>
       <div id="videos" class="videos"></div>
     </div>
+
   </section>
 
-  <aside class="sidebar">
+  <!-- RIGHT SIDEBAR -->
+  <aside>
+
     <div class="card">
       <h3>AI Football Agent</h3>
       <div id="ai-news"></div>
     </div>
-    <div class="ad small">AdSense</div>
+
+    <div class="card">
+      <h3>Top Stories</h3>
+      <div id="top-news"></div>
+    </div>
+
+    <div class="ad small">ADS</div>
+
   </aside>
+
 </main>
 
 <script src="app.js"></script>
