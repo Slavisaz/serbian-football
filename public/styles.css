@@ -1,56 +1,83 @@
 body {
-  font-family: Arial;
   margin: 0;
+  font-family: Arial, sans-serif;
   background: #f5f6fa;
 }
 
+/* HEADER */
 .topbar {
-  background: #d90404;
-  color: white;
+  background: white;
+  border-bottom: 2px solid #eee;
   display: flex;
   justify-content: space-between;
   padding: 15px 30px;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .logo img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
 }
 
-.logo img {
-  width: 40px;
+nav a {
+  margin-left: 20px;
+  cursor: pointer;
 }
 
-.container {
+/* LAYOUT */
+.layout {
   display: grid;
   grid-template-columns: 3fr 1fr;
   gap: 20px;
   padding: 20px;
 }
 
+/* HERO */
+.hero {
+  height: 250px;
+  background: url("https://images.unsplash.com/photo-1508098682722-e99c643e7f0b") center/cover;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 12px;
+}
+
+/* CARDS */
 .card {
   background: white;
-  padding: 20px;
+  padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   margin-bottom: 20px;
 }
 
-.breaking {
-  background: linear-gradient(90deg, #ff2d2d, #d90404);
-  color: white;
-  padding: 25px;
-  border-radius: 12px;
-  font-size: 22px;
-  font-weight: bold;
+/* GRID */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
+/* ADS */
 .ad {
   background: #eaeaea;
   text-align: center;
   padding: 20px;
   margin: 15px;
   border-radius: 10px;
+}
+
+/* VIDEOS */
+.videos iframe {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 10px;
 }
