@@ -3,158 +3,296 @@ export default {
     const url = new URL(req.url);
 
     if (url.pathname === "/api/news") {
-      const news = await buildNewsFeed();
-      return new Response(JSON.stringify(news), {
-        headers: { "Content-Type": "application/json" }
-      });
+      return json(await buildNewsFeed());
     }
 
     return fetch(req);
   }
 };
 
-const RSS_SOURCES = [
-  {
-    name: "Tanjug English",
-    url: "https://www.tanjug.rs/rss/english/sports"
-  },
-  {
-    name: "B92 English",
-    url: "https://www.b92.net/rss/b92/english"
-  },
-  {
-    name: "Yahoo Soccer",
-    url: "https://sports.yahoo.com/soccer/rss/"
-  }
-];
-
-// ✅ keywords
-const FOOTBALL_TERMS = [
-  "football", "soccer", "match", "goal", "coach",
-  "uefa", "fifa", "league", "cup", "qualifier"
-];
-
-const SERBIA_TERMS = [
-  "serbia", "serbian", "belgrade", "partizan",
-  "red star", "vojvodina", "superliga"
-];
-
-// ✅ 48 HOURS FILTER
 const MAX_AGE_MS = 48 * 60 * 60 * 1000;
 
+const RSS_SOURCES = [
+  { name: "Tanjug English", url: "https://www.tanjug.rs/rss/english/sports", type: "media" },
+  { name: "B92 English", url: "https://www.b92.net/rss/b92/english", type: "media" },
+  { name: "Yahoo Soccer", url: "https://sports.yahoo.com/soccer/rss/", type: "media" }
+];
+
+const FOOTBALL_TERMS = [
+  "football", "soccer", "superliga", "super league", "match", "goal",
+  "coach", "manager", "striker", "midfielder", "defender", "qualifier",
+  "qualifying", "uefa", "fifa", "national team", "youth team", "u19", "u21"
+];
+
+const SERBIAN_TERMS = [
+  "serbia", "serbian", "red star", "crvena zvezda", "partizan", "vojvodina",
+  "tsc", "radnicki", "radnički", "cukaricki", "čukarički", "novi pazar",
+  "superliga", "fss", "eagles"
+];
+
+const HARD_EXCLUDE = [
+  "basketball", "nba", "euroleague", "tennis", "atp", "wta", "volleyball",
+  "handball", "water polo", "formula 1", "f1", "boxing", "mma", "ufc",
+  "golf", "baseball", "nfl", "pipeline", "oil", "gas", "nato", "athletics"
+];
+
+const FALLBACK_IMAGES = [
+  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1518604666860-9ed391f76460?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?auto=format&fit=crop&w=800&q=80"
+];
+
 async function buildNewsFeed() {
-  let all = [];
+  const [fssItems, rssResults] = await Promise.all([
+    fetchFssEnglish(),
+    Promise.all(RSS_SOURCES.map(fetchFeed))
+  ]);
 
-  for (const src of RSS_SOURCES) {
-    try {
-      const res = await fetch(src.url);
-      const text = await res.text();
+  const rssItems = rssResults
+    .flat()
+    .filter(hasContent)
+    .filter(isSerbianFootball)
+    .filter(isRecent)
+    .map(cleanItem)
+    .filter(Boolean);
 
-      const items = parseRSS(text, src.name);
-      all.push(...items);
-    } catch (e) {
-      console.log("RSS error:", src.name);
-    }
-  }
+  const official = dedupe(fssItems)
+    .sort((a, b) => b.dateTs - a.dateTs)
+    .slice(0, 3);
 
-  // ✅ FILTER PIPELINE
-  const filtered = all
-    .filter(isFootball)
-    .filter(isSerbianRelated)
-    .filter(isRecent) // ⭐ NEW FILTER
-    .sort((a, b) => b.date - a.date)
-    .slice(0, 5);
+  const media = dedupe(rssItems)
+    .sort((a, b) => b.dateTs - a.dateTs)
+    .filter(item => !official.some(o => sameTitle(o.title, item.title)))
+    .slice(0, 2);
 
-  // fallback if empty
-  if (filtered.length === 0) {
-    return [{
-      title: "No fresh Serbian football news (last 48h)",
-      source: "System",
-      link: "#",
-      image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2"
-    }];
-  }
+  const merged = [...official, ...media];
 
-  return filtered;
+  return merged.map((item, i) => ({
+    ...item,
+    image: item.image || FALLBACK_IMAGES[i % FALLBACK_IMAGES.length]
+  }));
 }
 
-// ------------------------
+async function fetchFssEnglish() {
+  try {
+    const res = await fetch("https://fss.rs/en/", {
+      headers: { "user-agent": "Mozilla/5.0 SerbianFootballPortal/1.0" }
+    });
 
-function parseRSS(xml, source) {
-  const items = [];
+    if (!res.ok) return [];
 
-  const matches = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)];
+    const html = await res.text();
 
-  for (const m of matches) {
-    const item = m[1];
+    // Grab headline links from the top section of the English homepage
+    const matches = [
+      ...html.matchAll(/<a[^>]+href="([^"]+)"[^>]*>\s*([A-Z0-9][\s\S]*?)\s*<\/a>/gi)
+    ];
 
-    const title = clean(get(item, "title"));
-    const link = get(item, "link");
-    const pubDate = new Date(get(item, "pubDate"));
-    const image =
-      get(item, "media:content", "url") ||
-      get(item, "enclosure", "url") ||
-      extractImage(item) ||
-      fallbackImage();
+    const candidates = matches
+      .map((m) => {
+        const href = m[1] || "";
+        const rawText = stripHtml(m[2] || "");
+        const title = cleanText(rawText);
 
-    if (!title || !link) continue;
+        return {
+          href,
+          title
+        };
+      })
+      .filter(x => x.title.length > 20)
+      .filter(x => isSerbianFootball({ title: x.title, description: x.title }))
+      .slice(0, 12);
 
-    items.push({
+    const unique = dedupe(
+      candidates.map((x) => ({
+        title: x.title,
+        link: absolutizeFssUrl(x.href),
+        source: "FSS",
+        sourceType: "official",
+        dateTs: Date.now(), // homepage items are current; keeps them above stale RSS
+        image: FALLBACK_IMAGES[0]
+      }))
+    );
+
+    return unique.slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
+function absolutizeFssUrl(href) {
+  if (!href) return "https://fss.rs/en/";
+  if (href.startsWith("http")) return href;
+  if (href.startsWith("/")) return "https://fss.rs" + href;
+  return "https://fss.rs/" + href.replace(/^\.?\//, "");
+}
+
+async function fetchFeed(source) {
+  try {
+    const res = await fetch(source.url, {
+      headers: { "user-agent": "Mozilla/5.0 SerbianFootballPortal/1.0" }
+    });
+
+    if (!res.ok) return [];
+
+    const xml = await res.text();
+    return parseRss(xml, source.name, source.type);
+  } catch {
+    return [];
+  }
+}
+
+function parseRss(xml, sourceName, sourceType) {
+  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/gi)];
+
+  return items.map((m) => {
+    const block = m[1];
+    const title = cleanText(getTag(block, "title"));
+    const link = cleanText(getTag(block, "link"));
+    const pubDate = cleanText(getTag(block, "pubDate"));
+    const description = stripHtml(cleanText(getTag(block, "description")));
+
+    const mediaUrl =
+      getMediaContentUrl(block) ||
+      getEnclosureUrl(block) ||
+      getImgFromDescription(getTag(block, "description"));
+
+    return {
       title,
       link,
-      source,
-      date: pubDate,
-      image
-    });
-  }
-
-  return items;
+      source: sourceName,
+      sourceType,
+      description,
+      image: mediaUrl,
+      dateTs: pubDate ? new Date(pubDate).getTime() : 0
+    };
+  });
 }
 
-// ------------------------
-
-function isFootball(n) {
-  const t = n.title.toLowerCase();
-  return FOOTBALL_TERMS.some(k => t.includes(k));
-}
-
-function isSerbianRelated(n) {
-  const t = n.title.toLowerCase();
-  return SERBIA_TERMS.some(k => t.includes(k));
-}
-
-// ⭐ CRITICAL FIX
-function isRecent(n) {
-  const now = Date.now();
-  return (now - n.date.getTime()) <= MAX_AGE_MS;
-}
-
-// ------------------------
-
-function get(xml, tag, attr) {
-  if (attr) {
-    const r = new RegExp(`<${tag}[^>]*${attr}="([^"]+)"`, "i");
-    const m = xml.match(r);
-    return m ? m[1] : "";
-  }
-
-  const r = new RegExp(`<${tag}>(.*?)</${tag}>`, "is");
-  const m = xml.match(r);
+function getTag(xml, tag) {
+  const m = xml.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, "i"));
   return m ? m[1] : "";
 }
 
-function extractImage(xml) {
-  const m = xml.match(/<img[^>]+src="([^"]+)"/i);
-  return m ? m[1] : "";
+function getMediaContentUrl(xml) {
+  const m = xml.match(/<media:content[^>]*url=["']([^"']+)["']/i);
+  return m ? cleanText(m[1]) : "";
 }
 
-function clean(str = "") {
-  return str
-    .replace(/<!\[CDATA\[(.*?)\]\]>/g, "$1") // remove CDATA
-    .replace(/&[^;]+;/g, "") // remove html entities
+function getEnclosureUrl(xml) {
+  const m = xml.match(/<enclosure[^>]*url=["']([^"']+)["']/i);
+  return m ? cleanText(m[1]) : "";
+}
+
+function getImgFromDescription(html) {
+  const m = String(html || "").match(/<img[^>]*src=["']([^"']+)["']/i);
+  return m ? cleanText(m[1]) : "";
+}
+
+function cleanText(s) {
+  return decodeXml(
+    String(s || "")
+      .replace(/<!\[CDATA\[/gi, "")
+      .replace(/\]\]>/g, "")
+      .trim()
+  );
+}
+
+function stripHtml(s) {
+  return String(s || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
-function fallbackImage() {
-  return "https://images.unsplash.com/photo-1508098682722-e99c43a406b2";
+function decodeXml(s) {
+  return String(s || "")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
+}
+
+function hasContent(item) {
+  return item.title && item.link;
+}
+
+function includesAny(text, words) {
+  return words.some(word => text.includes(word));
+}
+
+function isSerbianFootball(item) {
+  const hay = `${item.title} ${item.description || ""}`.toLowerCase();
+
+  if (includesAny(hay, HARD_EXCLUDE)) return false;
+
+  const hasFootball = includesAny(hay, FOOTBALL_TERMS);
+  const hasSerbian = includesAny(hay, SERBIAN_TERMS);
+
+  if (hasFootball && hasSerbian) return true;
+
+  if (
+    hay.includes("crvena zvezda") ||
+    hay.includes("red star") ||
+    hay.includes("partizan") ||
+    hay.includes("serbia national team") ||
+    hay.includes("serbian national team") ||
+    hay.includes("superliga") ||
+    hay.includes("fss")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function isRecent(item) {
+  return item.dateTs && (Date.now() - item.dateTs) <= MAX_AGE_MS;
+}
+
+function cleanItem(item) {
+  return {
+    title: item.title.replace(/\s+/g, " ").trim(),
+    link: item.link,
+    source: item.source,
+    sourceType: item.sourceType || "media",
+    image: item.image || null,
+    dateTs: item.dateTs || 0
+  };
+}
+
+function dedupe(items) {
+  const seen = new Set();
+  const out = [];
+
+  for (const item of items) {
+    const key = normalizeTitle(item.title);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+
+  return out;
+}
+
+function normalizeTitle(title) {
+  return String(title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9čćšđž\s]/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function sameTitle(a, b) {
+  return normalizeTitle(a) === normalizeTitle(b);
+}
+
+function json(data) {
+  return new Response(JSON.stringify(data), {
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=300"
+    }
+  });
 }
