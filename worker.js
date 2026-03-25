@@ -24,26 +24,23 @@ const KEYWORDS = [
   "partizan", "crvena zvezda", "red star", "vojvodina",
   "tsc", "cukaricki", "čukarički", "radnicki", "radnički",
   "novi pazar", "mladost", "napredak", "javor",
-  "fss", "orlovi", "reprezentacija", "u19", "u21"
+  "fss", "orlovi", "reprezentacija", "u19", "u21",
+  "omladinci", "fudbal", "srpski fudbal", "srbija"
 ];
 
 async function buildNewsFeed() {
-  const [rssItems, fssItems] = await Promise.all([
-    fetchAllRss(),
-    fetchFssNews()
-  ]);
+  const rssItems = await fetchAllRss();
 
-  const merged = [...fssItems, ...rssItems]
+  const merged = rssItems
     .filter(isRelevant)
     .map(normalizeItem)
     .filter(Boolean);
 
-  const deduped = dedupeByTitle(merged)
-    .sort((a, b) => b.dateTs - a.dateTs);
+  const deduped = dedupeByTitle(merged).sort((a, b) => b.dateTs - a.dateTs);
 
   let latest = deduped.filter(item => Date.now() - item.dateTs <= DAY_MS);
 
-  if (latest.length < 6) {
+  if (latest.length < 8) {
     latest = deduped.filter(item => Date.now() - item.dateTs <= 3 * DAY_MS);
   }
 
@@ -57,9 +54,12 @@ async function fetchAllRss() {
         const res = await fetch(source.url, {
           headers: { "user-agent": "Mozilla/5.0 SerbianFootballPortal/1.0" }
         });
+
+        if (!res.ok) return [];
+
         const xml = await res.text();
         return parseRss(xml, source);
-      } catch (err) {
+      } catch {
         return [];
       }
     })
@@ -89,34 +89,6 @@ function parseRss(xml, source) {
   });
 }
 
-async function fetchFssNews() {
-  try {
-    const res = await fetch("https://fss.rs/vesti/", {
-      headers: { "user-agent": "Mozilla/5.0 SerbianFootballPortal/1.0" }
-    });
-    const html = await res.text();
-
-    const items = [...html.matchAll(/##\s*【\d+†([^】]+)】[\s\S]*?(\d{2}\.\d{2}\.\d{4}\.)/g)];
-
-    return items.slice(0, 12).map((m) => {
-      const titleSr = cleanWhitespace(m[1]);
-      const dateSr = m[2];
-      const dateTs = parseSerbianDotDate(dateSr);
-
-      return {
-        source: "FSS",
-        sourceType: "official",
-        title: translateHeadline(titleSr),
-        link: "https://fss.rs/vesti/",
-        description: "",
-        dateTs
-      };
-    });
-  } catch (err) {
-    return [];
-  }
-}
-
 function isRelevant(item) {
   const hay = `${item.title} ${item.description || ""}`.toLowerCase();
   return KEYWORDS.some(k => hay.includes(k.toLowerCase()));
@@ -126,12 +98,13 @@ function normalizeItem(item) {
   if (!item.title || !item.link) return null;
 
   return {
-    title: translateHeadline(cleanTitle(item.title)),
+    title: cleanTitle(item.title),
     link: item.link,
     source: item.source,
     sourceType: item.sourceType,
-    ageHours: item.dateTs ? Math.floor((Date.now() - item.dateTs) / 3600000) : null,
-    dateTs: item.dateTs || 0
+    ageHours: item.dateTs ? Math.max(0, Math.floor((Date.now() - item.dateTs) / 3600000)) : null,
+    dateTs: item.dateTs || 0,
+    image: null
   };
 }
 
@@ -161,44 +134,17 @@ function cleanTitle(title) {
     .trim();
 }
 
-function translateHeadline(title) {
-  const map = [
-    [/ФСС/gi, "FSS"],
-    [/репрезентациј[аеи]/gi, "national team"],
-    [/Србиј[ае]/gi, "Serbia"],
-    [/Супер лиг[ае]/gi, "SuperLiga"],
-    [/Прва лиг[ае]/gi, "First League"],
-    [/побед[аеи]/gi, "win"],
-    [/утакмиц[ае]/gi, "match"],
-    [/тренинг/gi, "training"],
-    [/квалификациј[ае]/gi, "qualifiers"],
-    [/Енглеск[ае]/gi, "England"],
-    [/Шпаниј[ае]/gi, "Spain"],
-    [/Саудијск[ае]/gi, "Saudi Arabia"],
-    [/видео/gi, "video"]
-  ];
-
-  let out = title;
-  for (const [pattern, replacement] of map) {
-    out = out.replace(pattern, replacement);
-  }
-  return out;
-}
-
-function parseSerbianDotDate(s) {
-  const m = s.match(/(\d{2})\.(\d{2})\.(\d{4})\./);
-  if (!m) return 0;
-  const [, dd, mm, yyyy] = m;
-  return new Date(`${yyyy}-${mm}-${dd}T12:00:00Z`).getTime();
-}
-
 function getTag(xml, tag) {
   const m = xml.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, "i"));
   return m ? m[1] : "";
 }
 
 function stripHtml(s) {
-  return s.replace(/<!\[CDATA\[|\]\]>/g, "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return s
+    .replace(/<!\[CDATA\[|\]\]>/g, "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function decodeXml(s) {
@@ -209,10 +155,6 @@ function decodeXml(s) {
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">");
-}
-
-function cleanWhitespace(s) {
-  return s.replace(/\s+/g, " ").trim();
 }
 
 function json(data) {
