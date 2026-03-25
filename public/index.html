@@ -2,111 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Serbian Football</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="topbar">
-    <a href="/" class="brand" aria-label="Serbian Football home">
-      <img src="logo.svg" alt="Serbian Football logo" class="brand-logo" />
-      <div class="brand-text">
-        <div class="brand-title">SERBIAN FOOTBALL</div>
-        <div class="brand-subtitle">Latest Serbian football news</div>
-      </div>
-    </a>
 
-    <nav class="main-nav">
-      <a href="#hero">News</a>
-      <a href="#standings-card">Standings</a>
-      <a href="#results-card">Results</a>
-      <a href="#matches-card">Schedule</a>
-      <a href="#videos-card">Videos</a>
-    </nav>
-  </header>
+<header class="header">
+  <div class="logo">
+    <img src="logo.svg" />
+    <div>
+      <h1>SERBIAN <span>FOOTBALL</span></h1>
+      <p>Latest Serbian football news</p>
+    </div>
+  </div>
 
-  <div class="ad">ADVERTISEMENT</div>
+  <nav>
+    <a href="#">News</a>
+    <a href="#">Standings</a>
+    <a href="#">Results</a>
+    <a href="#">Schedule</a>
+    <a href="#">Videos</a>
+  </nav>
+</header>
 
-  <main class="page">
-    <section class="content-left">
-      <section id="hero" class="hero-card">
-        <div class="hero-image"></div>
-        <div class="hero-overlay">
-          <div class="hero-kicker">LATEST NEWS</div>
-          <div id="hero-content">
-            <h1 class="hero-title">Loading latest Serbian football news...</h1>
-            <div class="hero-meta">Please wait</div>
-          </div>
-        </div>
-      </section>
+<div class="container">
 
-      <section id="standings-card" class="panel">
-        <div class="panel-header">
-          <h2>Serbian SuperLiga</h2>
-          <span class="pill">TABLE</span>
-        </div>
-        <div id="standings" class="panel-body empty">Standings coming next step.</div>
-      </section>
+  <div class="main">
 
-      <div class="split-grid">
-        <section id="results-card" class="panel">
-          <div class="panel-header">
-            <h3>Recent Results</h3>
-          </div>
-          <div id="results" class="panel-body empty">Results coming next step.</div>
-        </section>
+    <div id="hero"></div>
 
-        <section id="matches-card" class="panel">
-          <div class="panel-header">
-            <h3>Upcoming Matches</h3>
-          </div>
-          <div id="matches" class="panel-body empty">Schedule coming next step.</div>
-        </section>
-      </div>
+    <div class="card">
+      <h2>Serbian SuperLiga</h2>
+      <p>Standings coming next step.</p>
+    </div>
 
-      <section id="videos-card" class="panel">
-        <div class="panel-header">
-          <h2>Latest Videos</h2>
-          <span class="pill">VIDEO</span>
-        </div>
-        <div id="videos" class="videos-grid">
-          <div class="video-placeholder">Video feed coming next step.</div>
-          <div class="video-placeholder">FSS / Mozzart / UEFA / DAZN</div>
-          <div class="video-placeholder">Latest clips here</div>
-        </div>
-      </section>
-    </section>
+    <div class="grid">
+      <div class="card">Recent Results</div>
+      <div class="card">Upcoming Matches</div>
+    </div>
 
-    <aside class="content-right">
-      <section class="panel side-brand">
-        <div class="side-brand-inner">
-          <img src="logo.svg" alt="Serbian Football logo" class="side-brand-logo" />
-          <div class="side-brand-text">SERBIAN FOOTBALL</div>
-        </div>
-      </section>
+    <div class="card">
+      <h2>Latest Videos</h2>
+    </div>
 
-      <section class="panel">
-        <div class="panel-header">
-          <h3>AI Football Agent</h3>
-        </div>
-        <div id="ai-news" class="story-list">
-          <div class="panel-body empty">Loading stories...</div>
-        </div>
-      </section>
+  </div>
 
-      <section class="panel">
-        <div class="panel-header">
-          <h3>Top Stories</h3>
-        </div>
-        <div id="top-news" class="story-list">
-          <div class="panel-body empty">Loading stories...</div>
-        </div>
-      </section>
+  <aside class="sidebar">
+    <h3>AI Football Agent</h3>
+    <div id="news-list"></div>
+  </aside>
 
-      <div class="ad ad-side">ADS</div>
-    </aside>
-  </main>
+</div>
 
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
