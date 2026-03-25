@@ -3,7 +3,13 @@ export default {
     const url = new URL(req.url);
 
     if (url.pathname === "/api/news") {
-      return json(await buildNewsFeed());
+      const news = await buildNewsFeed();
+      return new Response(JSON.stringify(news), {
+        headers: {
+          "content-type": "application/json; charset=utf-8",
+          "cache-control": "public, max-age=300"
+        }
+      });
     }
 
     return fetch(req);
@@ -21,30 +27,31 @@ const RSS_SOURCES = [
 const FOOTBALL_TERMS = [
   "football", "soccer", "superliga", "super league", "match", "goal",
   "coach", "manager", "striker", "midfielder", "defender", "qualifier",
-  "qualifying", "uefa", "fifa", "national team", "youth team", "u19", "u21"
+  "qualifying", "uefa", "fifa", "national team", "u19", "u21", "cup"
 ];
 
 const SERBIAN_TERMS = [
   "serbia", "serbian", "red star", "crvena zvezda", "partizan", "vojvodina",
   "tsc", "radnicki", "radnički", "cukaricki", "čukarički", "novi pazar",
-  "superliga", "fss", "eagles"
+  "superliga", "fss", "belgrade"
 ];
 
 const HARD_EXCLUDE = [
   "basketball", "nba", "euroleague", "tennis", "atp", "wta", "volleyball",
   "handball", "water polo", "formula 1", "f1", "boxing", "mma", "ufc",
-  "golf", "baseball", "nfl", "pipeline", "oil", "gas", "nato", "athletics"
+  "golf", "baseball", "nfl", "pipeline", "oil", "gas", "nato", "athletics",
+  "indoor championships"
 ];
 
 const FALLBACK_IMAGES = [
-  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1518604666860-9ed391f76460?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?auto=format&fit=crop&w=800&q=80"
+  "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1518604666860-9ed391f76460?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?auto=format&fit=crop&w=1200&q=80"
 ];
 
 async function buildNewsFeed() {
   const [fssItems, rssResults] = await Promise.all([
-    fetchFssEnglish(),
+    fetchFssMainNews(),
     Promise.all(RSS_SOURCES.map(fetchFeed))
   ]);
 
@@ -73,9 +80,9 @@ async function buildNewsFeed() {
   }));
 }
 
-async function fetchFssEnglish() {
+async function fetchFssMainNews() {
   try {
-    const res = await fetch("https://fss.rs/en/", {
+    const res = await fetch("https://fss.rs/en/news/", {
       headers: { "user-agent": "Mozilla/5.0 SerbianFootballPortal/1.0" }
     });
 
@@ -83,48 +90,63 @@ async function fetchFssEnglish() {
 
     const html = await res.text();
 
-    // Grab headline links from the top section of the English homepage
+    // Main article cards on FSS News page:
+    // look for H2 headline link + nearby date
     const matches = [
-      ...html.matchAll(/<a[^>]+href="([^"]+)"[^>]*>\s*([A-Z0-9][\s\S]*?)\s*<\/a>/gi)
+      ...html.matchAll(
+        /<h2[^>]*>\s*<a[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/h2>[\s\S]*?<time[^>]*>([\s\S]*?)<\/time>/gi
+      )
     ];
 
-    const candidates = matches
-      .map((m) => {
-        const href = m[1] || "";
-        const rawText = stripHtml(m[2] || "");
-        const title = cleanText(rawText);
+    const items = matches.map((m) => {
+      const link = absolutizeFssUrl(m[1]);
+      const title = cleanText(stripHtml(m[2]));
+      const dateText = cleanText(stripHtml(m[3]));
 
-        return {
-          href,
-          title
-        };
-      })
-      .filter(x => x.title.length > 20)
-      .filter(x => isSerbianFootball({ title: x.title, description: x.title }))
-      .slice(0, 12);
-
-    const unique = dedupe(
-      candidates.map((x) => ({
-        title: x.title,
-        link: absolutizeFssUrl(x.href),
+      return {
+        title,
+        link,
         source: "FSS",
         sourceType: "official",
-        dateTs: Date.now(), // homepage items are current; keeps them above stale RSS
-        image: FALLBACK_IMAGES[0]
-      }))
-    );
+        image: null,
+        dateTs: parseFssDate(dateText)
+      };
+    });
 
-    return unique.slice(0, 3);
+    // Fallback if theme markup differs
+    if (!items.length) {
+      const loose = [...html.matchAll(/##\s*【\d+†([^】]+)】[\s\S]*?(\d{2}\.\d{2}\.\d{4}\.)/g)];
+      return loose.slice(0, 3).map((m, i) => ({
+        title: cleanText(m[1]),
+        link: "https://fss.rs/en/news/",
+        source: "FSS",
+        sourceType: "official",
+        image: FALLBACK_IMAGES[i % FALLBACK_IMAGES.length],
+        dateTs: parseFssDate(m[2])
+      }));
+    }
+
+    return items
+      .filter(hasContent)
+      .filter(item => item.dateTs && isRecent(item))
+      .slice(0, 3);
   } catch {
     return [];
   }
 }
 
 function absolutizeFssUrl(href) {
-  if (!href) return "https://fss.rs/en/";
+  if (!href) return "https://fss.rs/en/news/";
   if (href.startsWith("http")) return href;
   if (href.startsWith("/")) return "https://fss.rs" + href;
   return "https://fss.rs/" + href.replace(/^\.?\//, "");
+}
+
+function parseFssDate(s) {
+  const m = String(s || "").match(/(\d{2})\.(\d{2})\.(\d{4})\.?/);
+  if (!m) return 0;
+  const [, dd, mm, yyyy] = m;
+  return new Date(`${yyyy}-${mm}-${dd}T12:00:00Z`).getTime();
 }
 
 async function fetchFeed(source) {
@@ -232,7 +254,7 @@ function isSerbianFootball(item) {
 
   if (hasFootball && hasSerbian) return true;
 
-  if (
+  return (
     hay.includes("crvena zvezda") ||
     hay.includes("red star") ||
     hay.includes("partizan") ||
@@ -240,11 +262,7 @@ function isSerbianFootball(item) {
     hay.includes("serbian national team") ||
     hay.includes("superliga") ||
     hay.includes("fss")
-  ) {
-    return true;
-  }
-
-  return false;
+  );
 }
 
 function isRecent(item) {
