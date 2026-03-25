@@ -1,113 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Serbian Football</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serbian Football</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <a href="/" class="logo-wrap" aria-label="Serbian Football home">
-        <img src="logo.svg" alt="Serbian Football logo" class="brand-logo" />
-        <div class="brand-text">
-          <span class="brand-title">SERBIAN FOOTBALL</span>
-          <span class="brand-subtitle">Latest Serbian football news in English</span>
-        </div>
-      </a>
+
+<header class="topbar">
+  <div class="logo-wrap">
+    <img src="logo.svg" class="logo">
+    <h1>SERBIAN FOOTBALL</h1>
+  </div>
+  <nav>
+    <a href="#">News</a>
+    <a href="#">Standings</a>
+    <a href="#">Results</a>
+    <a href="#">Schedule</a>
+    <a href="#">Videos</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-overlay">
+    <div class="tag">LATEST NEWS</div>
+    <h2 id="hero-title">Loading...</h2>
+    <p id="hero-meta"></p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="left">
+    <div class="card">Serbian SuperLiga</div>
+    <div class="grid">
+      <div class="card">Recent Results</div>
+      <div class="card">Upcoming Matches</div>
     </div>
+    <div class="card">Latest Videos</div>
+  </div>
 
-    <nav class="main-nav">
-      <a href="#hero">News</a>
-      <a href="#standings-card">Standings</a>
-      <a href="#results-card">Results</a>
-      <a href="#matches-card">Schedule</a>
-      <a href="#videos-card">Videos</a>
-    </nav>
-  </header>
+  <div class="right">
+    <div class="card">
+      <h3>AI Football Agent</h3>
+      <div id="news"></div>
+    </div>
+  </div>
+</div>
 
-  <div class="ad ad-top">ADVERTISEMENT</div>
-
-  <main class="page">
-    <section class="content-left">
-      <section id="hero" class="hero-card">
-        <div class="hero-overlay">
-          <div class="hero-label">LATEST NEWS</div>
-          <div id="hero-content">
-            <h1 class="hero-title">Loading latest Serbian football news...</h1>
-            <div class="hero-meta">Please wait</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="standings-card" class="panel standings-panel">
-        <div class="panel-header">
-          <h2>Serbian SuperLiga</h2>
-          <span class="panel-tag">Table</span>
-        </div>
-        <div id="standings" class="empty-state">Standings coming next step.</div>
-      </section>
-
-      <div class="split-grid">
-        <section id="results-card" class="panel mini-panel">
-          <div class="panel-header">
-            <h3>Recent Results</h3>
-          </div>
-          <div id="results" class="empty-state">Results coming next step.</div>
-        </section>
-
-        <section id="matches-card" class="panel mini-panel">
-          <div class="panel-header">
-            <h3>Upcoming Matches</h3>
-          </div>
-          <div id="matches" class="empty-state">Schedule coming next step.</div>
-        </section>
-      </div>
-
-      <section id="videos-card" class="panel videos-panel">
-        <div class="panel-header">
-          <h2>Latest Videos</h2>
-          <span class="panel-tag">Video</span>
-        </div>
-        <div id="videos" class="videos-grid">
-          <div class="video-placeholder">Video feed coming next step.</div>
-          <div class="video-placeholder">YouTube channel feed will appear here.</div>
-          <div class="video-placeholder">Mozzart / FSS / UEFA / DAZN.</div>
-        </div>
-      </section>
-    </section>
-
-    <aside class="content-right">
-      <section class="side-brand panel">
-        <div class="side-brand-inner">
-          <img src="logo.svg" alt="Serbian Football logo" class="side-brand-logo" />
-          <div class="side-brand-text">SERBIAN FOOTBALL</div>
-        </div>
-      </section>
-
-      <section class="panel sidebar-panel">
-        <div class="panel-header">
-          <h3>AI Football Agent</h3>
-        </div>
-        <div id="ai-news" class="story-list">
-          <div class="empty-state">Loading stories...</div>
-        </div>
-      </section>
-
-      <section class="panel sidebar-panel">
-        <div class="panel-header">
-          <h3>Top Stories</h3>
-        </div>
-        <div id="top-news" class="story-list">
-          <div class="empty-state">Loading stories...</div>
-        </div>
-      </section>
-
-      <div class="ad ad-side">ADS</div>
-    </aside>
-  </main>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
