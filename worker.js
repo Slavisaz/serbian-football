@@ -25,13 +25,40 @@ const RSS_SOURCES = [
   }
 ];
 
-const INCLUDE = [
+/*
+  STRICTER RULES:
+  1. Must mention football/soccer OR known Serbian football terms
+  2. Must also mention Serbia/Serbian club/national-team context
+*/
+
+const FOOTBALL_TERMS = [
+  "football",
+  "soccer",
+  "superliga",
+  "super league",
+  "match",
+  "goal",
+  "coach",
+  "striker",
+  "midfielder",
+  "defender",
+  "qualifier",
+  "qualifying",
+  "uefa",
+  "fifa",
+  "championship",
+  "national team",
+  "youth team",
+  "u19",
+  "u21"
+];
+
+const SERBIAN_TERMS = [
   "serbia",
   "serbian",
   "red star",
   "crvena zvezda",
   "partizan",
-  "superliga",
   "vojvodina",
   "tsc",
   "radnicki",
@@ -39,17 +66,19 @@ const INCLUDE = [
   "cukaricki",
   "čukarički",
   "novi pazar",
-  "serbia national team",
-  "serbian national team",
-  "u19",
-  "u21"
+  "superliga",
+  "fss",
+  "trikolori",
+  "eagles"
 ];
 
-const EXCLUDE = [
+const HARD_EXCLUDE = [
   "basketball",
   "nba",
   "euroleague",
   "tennis",
+  "atp",
+  "wta",
   "volleyball",
   "handball",
   "water polo",
@@ -60,7 +89,17 @@ const EXCLUDE = [
   "ufc",
   "golf",
   "baseball",
-  "nfl"
+  "nfl",
+  "pipeline",
+  "oil",
+  "gas",
+  "nato",
+  "remembrance",
+  "victims",
+  "indoor championships",
+  "high jumper",
+  "athletics",
+  "construction"
 ];
 
 const FALLBACK_IMAGES = [
@@ -182,11 +221,34 @@ function hasContent(item) {
   return item.title && item.link;
 }
 
+function includesAny(text, words) {
+  return words.some(word => text.includes(word));
+}
+
 function isSerbianFootball(item) {
   const hay = `${item.title} ${item.description}`.toLowerCase();
 
-  if (EXCLUDE.some(word => hay.includes(word))) return false;
-  return INCLUDE.some(word => hay.includes(word));
+  if (includesAny(hay, HARD_EXCLUDE)) return false;
+
+  const hasFootball = includesAny(hay, FOOTBALL_TERMS);
+  const hasSerbian = includesAny(hay, SERBIAN_TERMS);
+
+  // strict: needs both
+  if (hasFootball && hasSerbian) return true;
+
+  // club-only fallback: allow famous Serbian club/national-team references
+  if (
+    hay.includes("crvena zvezda") ||
+    hay.includes("red star") ||
+    hay.includes("partizan") ||
+    hay.includes("serbia national team") ||
+    hay.includes("serbian national team") ||
+    hay.includes("superliga")
+  ) {
+    return true;
+  }
+
+  return false;
 }
 
 function cleanItem(item) {
