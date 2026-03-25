@@ -125,14 +125,12 @@ a { color: inherit; }
     linear-gradient(180deg, rgba(14,48,99,0.12), rgba(14,48,99,0.12)),
     linear-gradient(180deg, #9ab7d4 0%, #7298c2 36%, #5e7fa8 37%, #47658a 52%, #447148 53%, #3f6f42 100%);
 }
-.hero-image::before {
-  content: "";
+.hero-image {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(to right, transparent 0 10%, rgba(255,255,255,.25) 10% 10.3%, transparent 10.3% 20%, rgba(255,255,255,.25) 20% 20.3%, transparent 20.3% 30%, rgba(255,255,255,.25) 30% 30.3%, transparent 30.3% 40%, rgba(255,255,255,.25) 40% 40.3%, transparent 40.3% 50%, rgba(255,255,255,.25) 50% 50.3%, transparent 50.3% 60%, rgba(255,255,255,.25) 60% 60.3%, transparent 60.3% 70%, rgba(255,255,255,.25) 70% 70.3%, transparent 70.3% 80%, rgba(255,255,255,.25) 80% 80.3%, transparent 80.3% 90%, rgba(255,255,255,.25) 90% 90.3%, transparent 90.3%),
-    linear-gradient(180deg, transparent 0 10%, rgba(255,255,255,.08) 10% 10.3%, transparent 10.3% 20%, rgba(255,255,255,.08) 20% 20.3%, transparent 20.3% 30%, rgba(255,255,255,.08) 30% 30.3%, transparent 30.3% 40%, rgba(255,255,255,.08) 40% 40.3%, transparent 40.3% 50%);
-  opacity: .18;
+  background-image: url("https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?q=80&w=1600");
+  background-size: cover;
+  background-position: center;
 }
 .hero-overlay {
   position: absolute;
