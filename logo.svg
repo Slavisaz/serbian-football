@@ -1,0 +1,10 @@
+<svg width="760" height="120" viewBox="0 0 760 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F5F7FF"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="78" font-family="Inter, Arial, sans-serif" font-size="58" font-weight="900" fill="url(#g)">SERBIAN FOOTBALL</text>
+  <text x="655" y="78" font-family="Segoe UI Emoji, Apple Color Emoji, Noto Color Emoji, sans-serif" font-size="58">⚽</text>
+</svg>
