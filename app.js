@@ -1,4 +1,4 @@
-const API_URL = '/api/news';
+const API_URL = "https://serbian-football-api.slavisa-cf8.workers.dev/api/news";
 
 function escapeHtml(value = '') {
   return value
