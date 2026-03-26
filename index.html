@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Serbian Football portal with live scores, fixtures, standings, and latest news." />
+  <title>Serbian Football</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <div class="topbar-inner container">
+        <button class="menu-btn" aria-label="Open navigation">☰</button>
+        <a class="brand" href="#top" aria-label="Serbian Football home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" role="img" focusable="false">
+              <defs>
+                <linearGradient id="ballBg" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#f73a49"/>
+                  <stop offset="100%" stop-color="#1f4fff"/>
+                </linearGradient>
+              </defs>
+              <circle cx="32" cy="32" r="30" fill="url(#ballBg)" stroke="#ffffff" stroke-width="2"/>
+              <path d="M32 14l8 6-3 9h-10l-3-9 8-6z" fill="#fff" opacity="0.95"/>
+              <path d="M20 31l7-2 5 4v9l-8 4-7-6 3-9zM44 31l7 2 3 9-7 6-8-4v-9l5-4zM24 46h16l2 10H22l2-10z" fill="#fff" opacity="0.92"/>
+            </svg>
+          </span>
+          <span class="brand-text">SERBIAN FOOTBALL</span>
+        </a>
+        <a class="top-link" href="#news">Latest</a>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <div class="container tabs-inner">
+        <a href="#live" class="active">LIVE</a>
+        <a href="#today">TODAY</a>
+        <a href="#table">TABLES</a>
+        <a href="#news">NEWS</a>
+        <a href="#clubs">CLUBS</a>
+      </div>
+    </nav>
+
+    <section class="ticker-wrap">
+      <div class="container">
+        <div class="ticker">
+          <span>RED STAR 2-1 PARTIZAN</span>
+          <span>VOJVODINA 0-0 RADNICKI NIS</span>
+          <span>TSC 1-0 CUKARICKI 55'</span>
+          <span>SERBIA U21 NEXT MATCH FRIDAY</span>
+        </div>
+      </div>
+    </section>
+
+    <main class="container main-grid" id="top">
+      <section class="hero panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Matchday spotlight</p>
+          <h1>Serbian Football. Live scores, fixtures, tables and latest headlines in one place.</h1>
+          <p class="hero-text">Mobile-first layout inspired by live score apps, ready for GitHub and Cloudflare Pages deployment.</p>
+          <div class="hero-actions">
+            <a href="#live" class="btn btn-primary">View Live Matches</a>
+            <a href="#news" class="btn btn-secondary">Read News</a>
+          </div>
+        </div>
+        <div class="hero-score card-highlight">
+          <div class="section-title">FEATURED MATCH</div>
+          <div class="teams big">
+            <span>Red Star</span>
+            <strong>2 - 1</strong>
+            <span>Partizan</span>
+          </div>
+          <div class="match-meta between">
+            <span>Belgrade Derby</span>
+            <span>78'</span>
+          </div>
+          <div class="mini-pills">
+            <span class="pill">Live</span>
+            <span class="pill">SuperLiga</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="live" class="panel content-card">
+        <div class="section-title">🔴 LIVE</div>
+
+        <article class="match-card featured">
+          <div class="teams">
+            <span>Red Star</span>
+            <strong>2 - 1</strong>
+            <span>Partizan</span>
+          </div>
+          <div class="match-meta between">
+            <span>Belgrade</span>
+            <span>78'</span>
+          </div>
+          <div class="promo-link">Top headline: Red Star takes control of the derby.</div>
+        </article>
+
+        <article class="match-card">
+          <div class="teams">
+            <span>Vojvodina</span>
+            <strong>0 - 0</strong>
+            <span>Radnicki Nis</span>
+          </div>
+          <div class="match-meta between">
+            <span>Novi Sad</span>
+            <span>Half-time</span>
+          </div>
+        </article>
+
+        <article class="match-card">
+          <div class="teams">
+            <span>TSC</span>
+            <strong>1 - 0</strong>
+            <span>Cukaricki</span>
+          </div>
+          <div class="match-meta between">
+            <span>Backa Topola</span>
+            <span>55'</span>
+          </div>
+        </article>
+      </section>
+
+      <section id="today" class="panel content-card">
+        <div class="section-title">📅 TODAY</div>
+        <div class="list-row"><span>TSC vs Cukaricki</span><strong>18:00</strong></div>
+        <div class="list-row"><span>Novi Pazar vs Napredak</span><strong>20:00</strong></div>
+        <div class="list-row"><span>IMT vs Mladost</span><strong>20:30</strong></div>
+      </section>
+
+      <section id="table" class="panel content-card">
+        <div class="section-title">📊 SUPERLIGA TABLE</div>
+        <div class="table-row"><span>1. Red Star</span><strong>65</strong></div>
+        <div class="table-row"><span>2. Partizan</span><strong>59</strong></div>
+        <div class="table-row"><span>3. TSC</span><strong>50</strong></div>
+        <div class="table-row"><span>4. Vojvodina</span><strong>47</strong></div>
+        <div class="table-row"><span>5. Cukaricki</span><strong>42</strong></div>
+      </section>
+
+      <section id="news" class="panel content-card news-panel">
+        <div class="section-title">📰 LATEST NEWS</div>
+        <article class="news-item">
+          <h3>Red Star wins the derby with a late second-half push</h3>
+          <p>The title race remains intense after the biggest fixture of the round delivered drama and goals.</p>
+        </article>
+        <article class="news-item">
+          <h3>Partizan evaluates next tactical steps after derby defeat</h3>
+          <p>Attention now turns to squad response, upcoming fixtures and pressure at the top of the table.</p>
+        </article>
+        <article class="news-item">
+          <h3>Serbia national team camp approaches with key players in form</h3>
+          <p>Several domestic and overseas performers are building momentum ahead of the next international window.</p>
+        </article>
+      </section>
+
+      <aside class="sidebar">
+        <section class="panel content-card compact">
+          <div class="section-title">🇷🇸 NATIONAL TEAM</div>
+          <div class="info-box">
+            <strong>Next match</strong>
+            <span>Serbia vs Austria</span>
+            <small>Friday · 20:45</small>
+          </div>
+        </section>
+
+        <section class="panel content-card compact ad-box">
+          <div class="section-title">AD SPACE</div>
+          <div class="ad-placeholder">728 × 90 banner<br>or sponsor module</div>
+        </section>
+
+        <section id="clubs" class="panel content-card compact">
+          <div class="section-title">🏟 CLUBS</div>
+          <div class="club-list">
+            <span>Red Star</span>
+            <span>Partizan</span>
+            <span>Vojvodina</span>
+            <span>TSC</span>
+            <span>Cukaricki</span>
+            <span>Novi Pazar</span>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="bottom-nav">
+      <a href="#top">Home</a>
+      <a href="#table">Tables</a>
+      <a href="#clubs">Clubs</a>
+      <a href="#news">News</a>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
