@@ -1,1 +1,54 @@
-*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#03122b;color:#fff}a{text-decoration:none;color:inherit}.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:linear-gradient(180deg,#e61d2f,#c70f21);border-bottom:1px solid rgba(255,255,255,.15)}.menu{font-size:34px;line-height:1}.brand-wrap{display:flex;align-items:center;gap:14px}.logo{width:42px;height:42px}.brand{font-size:28px;font-weight:800;letter-spacing:.3px}.latest{font-size:18px;font-weight:700}.tabs{display:flex;gap:0;justify-content:center;background:#15356c;border-bottom:1px solid rgba(255,255,255,.08)}.tabs a{padding:18px 20px;font-weight:800;font-size:15px;border-right:1px solid rgba(255,255,255,.08)}.tabs a:last-child{border-right:none}.ticker{padding:14px 22px;background:#102a55;color:#e4edff;font-weight:700;border-bottom:1px solid rgba(255,255,255,.08);white-space:nowrap;overflow:auto}.layout{max-width:1320px;margin:22px auto 80px;padding:0 18px;display:grid;grid-template-columns:2fr 1.2fr;gap:18px}.hero{grid-column:1 / span 2;display:grid;grid-template-columns:1.5fr 1fr;gap:24px;background:linear-gradient(180deg,#14346b,#081d3d)}.card{background:#17366e;border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;box-shadow:0 12px 30px rgba(0,0,0,.2)}.eyebrow{color:#82a9ff;font-size:14px;font-weight:800;letter-spacing:2px;margin-bottom:10px}.hero h1{font-size:66px;line-height:.98;margin:0 0 18px}.hero p{font-size:20px;color:#dbe6ff;max-width:760px}.hero-actions{display:flex;gap:14px;margin-top:20px}.btn{display:inline-block;padding:16px 24px;border-radius:999px;font-weight:800}.btn-primary{background:linear-gradient(180deg,#ff465b,#e21f33)}.btn-secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}.feature-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:22px;min-height:220px}.feature-title,.section-title{font-weight:800;font-size:18px;margin-bottom:16px}.feature-box h3{font-size:34px;line-height:1.1;margin:12px 0}.feature-box p{font-size:16px;color:#bfd1fb}.score-box{display:flex;align-items:center;justify-content:space-between;padding:18px 16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);margin-bottom:14px}.score-box:last-of-type{margin-bottom:8px}.team{font-size:20px}.sub{font-size:14px;color:#b6caef;margin-top:8px}.score{font-size:48px;font-weight:800}.align-right{text-align:right}.row{display:flex;justify-content:space-between;gap:12px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:19px}.row:last-child{border-bottom:none}.news-list{display:grid;gap:12px}.news-item{padding:16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}.news-item h3{margin:0 0 8px;font-size:26px;line-height:1.15}.news-item p{margin:0 0 10px;color:#d9e6ff}.news-item .meta{font-size:14px;color:#aac2f1}.note{color:#f7c65a;font-size:14px}.bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#000b1e;display:grid;grid-template-columns:repeat(4,1fr);padding:16px 10px;border-top:1px solid rgba(255,255,255,.08)}.bottom-nav a{text-align:center;font-weight:700;color:#dce7ff}@media (max-width:980px){.layout{grid-template-columns:1fr}.hero{grid-column:auto;grid-template-columns:1fr}.hero h1{font-size:42px}.brand{font-size:22px}.latest{display:none}}@media (max-width:640px){.topbar{padding:14px 16px}.brand{font-size:18px}.logo{width:34px;height:34px}.tabs{overflow:auto;justify-content:flex-start}.tabs a{white-space:nowrap;padding:14px 16px}.hero h1{font-size:34px}.hero p{font-size:17px}.score{font-size:34px}.team{font-size:18px}.row{font-size:17px}.news-item h3{font-size:22px}}
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b1d3a;
+  color: white;
+}
+
+.header {
+  background: red;
+  padding: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.ticker {
+  background: #1c3b6b;
+  padding: 10px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.hero {
+  display: flex;
+  padding: 20px;
+  gap: 20px;
+}
+
+.hero-text {
+  flex: 2;
+}
+
+.hero h1 {
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.hero-side {
+  flex: 1;
+  background: #1c3b6b;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.news {
+  padding: 20px;
+}
+
+.news-item {
+  background: #1c3b6b;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
