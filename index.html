@@ -4,97 +4,113 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Serbian Football</title>
-  <meta name="description" content="Serbian Football: latest English-language headlines about Serbian football, powered by live RSS sources." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="site-shell">
-    <header class="topbar">
-      <button class="menu-btn" type="button" aria-label="Open menu">☰</button>
-      <a class="brand" href="#top" aria-label="Serbian Football home">
-        <img src="logo.svg" alt="Serbian Football" />
-      </a>
-      <div class="topbar-right">Latest</div>
-    </header>
+  <header class="topbar">
+    <div class="menu">☰</div>
+    <div class="brand-wrap">
+      <img src="logo.svg" alt="Serbian Football logo" class="logo" />
+      <div class="brand">SERBIAN FOOTBALL</div>
+    </div>
+    <div class="latest">Latest</div>
+  </header>
 
-    <nav class="tabs" aria-label="Primary">
-      <a href="#news-feed" class="active">LIVE NEWS</a>
-      <a href="#ticker">HEADLINES</a>
-      <a href="#sources">SOURCES</a>
-      <a href="#about">ABOUT</a>
-    </nav>
+  <nav class="tabs">
+    <a href="#live">LIVE</a>
+    <a href="#today">TODAY</a>
+    <a href="#tables">TABLES</a>
+    <a href="#news">NEWS</a>
+    <a href="#clubs">CLUBS</a>
+  </nav>
 
-    <section id="ticker" class="ticker" aria-label="Latest headlines ticker">
-      <div class="ticker-track" id="tickerTrack">
-        <span>Loading live football headlines…</span>
+  <div class="ticker" id="ticker">Loading headlines…</div>
+
+  <main class="layout">
+    <section class="hero card">
+      <div>
+        <div class="eyebrow">MATCHDAY SPOTLIGHT</div>
+        <h1>Serbian Football. Live scores, fixtures, tables and latest headlines in one place.</h1>
+        <p>English logo, cleaner header, and real football news from RSS feeds filtered to Serbia and Serbian football.</p>
+        <div class="hero-actions">
+          <a href="#live" class="btn btn-primary">View Live Matches</a>
+          <a href="#news" class="btn btn-secondary">Read News</a>
+        </div>
+      </div>
+      <div class="feature-box" id="featuredMatch">
+        <div class="feature-title">FEATURED STORY</div>
+        <h3 id="featuredTitle">Loading…</h3>
+        <p id="featuredSource">Checking feeds</p>
       </div>
     </section>
 
-    <main class="page">
-      <section class="hero card">
-        <div class="hero-copy">
-          <p class="eyebrow">ENGLISH COVERAGE OF SERBIAN FOOTBALL</p>
-          <h1>Real headlines, filtered to football and Serbia-related stories.</h1>
-          <p class="hero-text">
-            This version uses live RSS feeds and keeps only football stories from Tanjug, B92, and Yahoo Sports that are about Serbia, Serbian clubs, or Serbian national teams.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#news-feed">Read Latest News</a>
-            <a class="btn btn-secondary" href="#sources">View Sources</a>
-          </div>
+    <section class="card" id="live">
+      <div class="section-title">🔴 LIVE</div>
+      <div class="score-box">
+        <div>
+          <div class="team">Red Star</div>
+          <div class="sub">Belgrade</div>
         </div>
-
-        <aside class="hero-panel">
-          <div class="panel-title">FEATURED STORY</div>
-          <div id="featuredCard" class="featured-card loading-card">
-            <div class="skeleton title"></div>
-            <div class="skeleton line"></div>
-            <div class="skeleton line short"></div>
-          </div>
-        </aside>
-      </section>
-
-      <section class="grid-two">
-        <section class="card info-card">
-          <div class="section-title">🔴 LIVE FILTER</div>
-          <div class="stat-line"><span>Topic filter</span><strong>Football only</strong></div>
-          <div class="stat-line"><span>Serbia filter</span><strong>Enabled</strong></div>
-          <div class="stat-line"><span>Language</span><strong>English</strong></div>
-          <p class="small-note">Stories unrelated to football or Serbia are removed automatically.</p>
-        </section>
-
-        <section class="card info-card" id="sources">
-          <div class="section-title">📰 SOURCES</div>
-          <div class="source-item">Tanjug English Sports RSS</div>
-          <div class="source-item">B92 English RSS</div>
-          <div class="source-item">Yahoo Sports Soccer RSS</div>
-          <p class="small-note">Yahoo items are included only when they are clearly Serbia or Serbian football related.</p>
-        </section>
-      </section>
-
-      <section id="news-feed" class="card news-section">
-        <div class="section-header">
-          <div class="section-title">📰 LATEST NEWS</div>
-          <button id="refreshBtn" class="refresh-btn" type="button">Refresh</button>
+        <div class="score">2 - 1</div>
+        <div class="align-right">
+          <div class="team">Partizan</div>
+          <div class="sub">78'</div>
         </div>
-        <div id="statusLine" class="status-line">Loading latest headlines…</div>
-        <div id="newsGrid" class="news-grid"></div>
-      </section>
+      </div>
+      <div class="score-box">
+        <div>
+          <div class="team">Vojvodina</div>
+          <div class="sub">Novi Sad</div>
+        </div>
+        <div class="score">0 - 0</div>
+        <div class="align-right">
+          <div class="team">Radnicki Nis</div>
+          <div class="sub">Half-time</div>
+        </div>
+      </div>
+      <div class="score-box">
+        <div>
+          <div class="team">TSC</div>
+          <div class="sub">Backa Topola</div>
+        </div>
+        <div class="score">1 - 0</div>
+        <div class="align-right">
+          <div class="team">Cukaricki</div>
+          <div class="sub">55'</div>
+        </div>
+      </div>
+      <div class="note">Scores are placeholder layout items. News below is real RSS data.</div>
+    </section>
 
-      <section id="about" class="card about-card">
-        <div class="section-title">ℹ️ ABOUT THIS BUILD</div>
-        <p>
-          This package is ready for GitHub and Cloudflare. The front end is static, and the Worker fetches the RSS feeds, filters them, and returns clean JSON to the page.
-        </p>
-        <p>
-          It does <strong>real news data</strong>. It does <strong>not</strong> invent scores or standings from these feeds. For live results and tables, you would need an additional legal football data source or widget.
-        </p>
-      </section>
-    </main>
-  </div>
+    <section class="card" id="today">
+      <div class="section-title">🗓️ TODAY</div>
+      <div class="row"><span>TSC vs Cukaricki</span><strong>18:00</strong></div>
+      <div class="row"><span>Novi Pazar vs Napredak</span><strong>20:00</strong></div>
+      <div class="row"><span>IMT vs Mladost</span><strong>20:30</strong></div>
+    </section>
+
+    <section class="card" id="tables">
+      <div class="section-title">📊 SUPERLIGA TABLE</div>
+      <div class="row"><span>1. Red Star</span><strong>65</strong></div>
+      <div class="row"><span>2. Partizan</span><strong>59</strong></div>
+      <div class="row"><span>3. TSC</span><strong>50</strong></div>
+      <div class="row"><span>4. Cukaricki</span><strong>45</strong></div>
+    </section>
+
+    <section class="card" id="news">
+      <div class="section-title">📰 LATEST NEWS</div>
+      <div id="newsList" class="news-list">
+        <div class="news-item">Loading football headlines…</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bottom-nav">
+    <a href="#">Home</a>
+    <a href="#tables">Tables</a>
+    <a href="#clubs">Clubs</a>
+    <a href="#news">News</a>
+  </footer>
 
   <script src="app.js"></script>
 </body>

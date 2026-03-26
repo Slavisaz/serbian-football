@@ -1,118 +1,54 @@
-const newsGrid = document.getElementById('newsGrid');
-const statusLine = document.getElementById('statusLine');
-const featuredCard = document.getElementById('featuredCard');
-const tickerTrack = document.getElementById('tickerTrack');
-const refreshBtn = document.getElementById('refreshBtn');
-
 const API_URL = '/api/news';
 
 function escapeHtml(value = '') {
   return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function formatDate(value) {
-  if (!value) return 'No date';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat('en-CA', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit'
-  }).format(date);
-}
-
-function renderFeatured(item) {
-  if (!item) {
-    featuredCard.className = 'featured-card';
-    featuredCard.innerHTML = '<div class="empty-state">No featured story is available right now.</div>';
-    return;
-  }
-
-  const summary = item.summary || 'Open the article for full details.';
-  featuredCard.className = 'featured-card';
-  featuredCard.innerHTML = `
-    <div class="featured-source">${escapeHtml(item.source)}</div>
-    <h3>${escapeHtml(item.title)}</h3>
-    <p>${escapeHtml(summary)}</p>
-    <div class="featured-meta">
-      <span class="tag">Football</span>
-      <span class="tag">Serbia</span>
-      <span>${escapeHtml(formatDate(item.pubDate))}</span>
-      <a class="read-link" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Read story</a>
-    </div>
-  `;
-}
-
-function renderTicker(items) {
-  if (!items.length) {
-    tickerTrack.innerHTML = '<span>No live football headlines found.</span>';
-    return;
-  }
-
-  const chunks = items.slice(0, 10).map((item) =>
-    `<span>${escapeHtml(item.title)}</span>`
-  );
-  tickerTrack.innerHTML = chunks.join('<span>•</span>');
-}
-
-function renderGrid(items) {
-  if (!items.length) {
-    newsGrid.innerHTML = '<div class="empty-state">No Serbian football stories were found in the feeds right now.</div>';
-    return;
-  }
-
-  newsGrid.innerHTML = items.map((item) => {
-    const summary = item.summary || 'Open the article for full details.';
-    return `
-      <article class="news-card">
-        <div class="source">${escapeHtml(item.source)}</div>
-        <h3>${escapeHtml(item.title)}</h3>
-        <p>${escapeHtml(summary)}</p>
-        <div class="meta">
-          <span>${escapeHtml(formatDate(item.pubDate))}</span>
-          <a class="read-link" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Open</a>
-        </div>
-      </article>
-    `;
-  }).join('');
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
 }
 
 async function loadNews() {
-  statusLine.textContent = 'Loading latest headlines…';
-  refreshBtn.disabled = true;
-  refreshBtn.textContent = 'Loading…';
+  const ticker = document.getElementById('ticker');
+  const featuredTitle = document.getElementById('featuredTitle');
+  const featuredSource = document.getElementById('featuredSource');
+  const newsList = document.getElementById('newsList');
 
   try {
-    const response = await fetch(API_URL, { headers: { 'Accept': 'application/json' } });
-    if (!response.ok) throw new Error(`Request failed: ${response.status}`);
-
-    const data = await response.json();
+    const res = await fetch(API_URL, { headers: { 'accept': 'application/json' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
     const items = Array.isArray(data.items) ? data.items : [];
 
-    renderFeatured(items[0]);
-    renderTicker(items);
-    renderGrid(items);
+    if (!items.length) {
+      ticker.textContent = 'No Serbian football headlines found right now.';
+      featuredTitle.textContent = 'No football headlines available';
+      featuredSource.textContent = 'Try again later';
+      newsList.innerHTML = '<div class="news-item">No Serbian football articles were returned by the feeds.</div>';
+      return;
+    }
 
-    const fetchedAt = data.generatedAt ? formatDate(data.generatedAt) : 'just now';
-    statusLine.textContent = `${items.length} Serbian football stories loaded. Updated ${fetchedAt}.`;
-  } catch (error) {
-    console.error(error);
-    renderFeatured(null);
-    renderTicker([]);
-    newsGrid.innerHTML = '<div class="empty-state">Could not load live news. Check your Worker deployment or try again.</div>';
-    statusLine.textContent = 'Live news could not be loaded.';
-  } finally {
-    refreshBtn.disabled = false;
-    refreshBtn.textContent = 'Refresh';
+    ticker.textContent = items.slice(0, 6).map(x => x.title).join(' • ');
+
+    const first = items[0];
+    featuredTitle.textContent = first.title;
+    featuredSource.textContent = `${first.source} • ${first.pubDate || 'Latest feed item'}`;
+
+    newsList.innerHTML = items.map(item => `
+      <article class="news-item">
+        <h3><a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a></h3>
+        <p>${escapeHtml(item.summary || 'Open the source article for full details.')}</p>
+        <div class="meta">${escapeHtml(item.source)}${item.pubDate ? ' • ' + escapeHtml(item.pubDate) : ''}</div>
+      </article>
+    `).join('');
+  } catch (err) {
+    console.error(err);
+    ticker.textContent = 'News API is not connected.';
+    featuredTitle.textContent = 'Connect the Worker API';
+    featuredSource.textContent = 'Your page updated, but the API endpoint is missing or still old.';
+    newsList.innerHTML = '<div class="news-item">The front-end loaded, but <strong>/api/news</strong> is not responding from your current deployment.</div>';
   }
 }
 
-refreshBtn.addEventListener('click', loadNews);
 loadNews();
