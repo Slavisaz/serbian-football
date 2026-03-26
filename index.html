@@ -2,116 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serbian Football</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header class="topbar">
-    <div class="menu">☰</div>
-    <div class="brand-wrap">
-      <img src="logo.svg" alt="Serbian Football logo" class="logo" />
-      <div class="brand">SERBIAN FOOTBALL</div>
-    </div>
-    <div class="latest">Latest</div>
-  </header>
 
-  <nav class="tabs">
-    <a href="#live">LIVE</a>
-    <a href="#today">TODAY</a>
-    <a href="#tables">TABLES</a>
-    <a href="#news">NEWS</a>
-    <a href="#clubs">CLUBS</a>
-  </nav>
+<header class="header">
+  <div class="logo">SERBIAN FOOTBALL ⚽</div>
+</header>
 
-  <div class="ticker" id="ticker">Loading headlines…</div>
+<div id="ticker" class="ticker"></div>
 
-  <main class="layout">
-    <section class="hero card">
-      <div>
-        <div class="eyebrow">MATCHDAY SPOTLIGHT</div>
-        <h1>Serbian Football. Live scores, fixtures, tables and latest headlines in one place.</h1>
-        <p>English logo, cleaner header, and real football news from RSS feeds filtered to Serbia and Serbian football.</p>
-        <div class="hero-actions">
-          <a href="#live" class="btn btn-primary">View Live Matches</a>
-          <a href="#news" class="btn btn-secondary">Read News</a>
-        </div>
-      </div>
-      <div class="feature-box" id="featuredMatch">
-        <div class="feature-title">FEATURED STORY</div>
-        <h3 id="featuredTitle">Loading…</h3>
-        <p id="featuredSource">Checking feeds</p>
-      </div>
-    </section>
+<section class="hero">
+  <div class="hero-text">
+    <h1>Serbian Football. Live scores, fixtures, tables and latest headlines.</h1>
+  </div>
+  <div class="hero-side">
+    <h3>Featured Story</h3>
+    <h2 id="featuredTitle"></h2>
+    <p id="featuredSource"></p>
+  </div>
+</section>
 
-    <section class="card" id="live">
-      <div class="section-title">🔴 LIVE</div>
-      <div class="score-box">
-        <div>
-          <div class="team">Red Star</div>
-          <div class="sub">Belgrade</div>
-        </div>
-        <div class="score">2 - 1</div>
-        <div class="align-right">
-          <div class="team">Partizan</div>
-          <div class="sub">78'</div>
-        </div>
-      </div>
-      <div class="score-box">
-        <div>
-          <div class="team">Vojvodina</div>
-          <div class="sub">Novi Sad</div>
-        </div>
-        <div class="score">0 - 0</div>
-        <div class="align-right">
-          <div class="team">Radnicki Nis</div>
-          <div class="sub">Half-time</div>
-        </div>
-      </div>
-      <div class="score-box">
-        <div>
-          <div class="team">TSC</div>
-          <div class="sub">Backa Topola</div>
-        </div>
-        <div class="score">1 - 0</div>
-        <div class="align-right">
-          <div class="team">Cukaricki</div>
-          <div class="sub">55'</div>
-        </div>
-      </div>
-      <div class="note">Scores are placeholder layout items. News below is real RSS data.</div>
-    </section>
+<section class="news">
+  <h2>Latest News</h2>
+  <div id="newsList"></div>
+</section>
 
-    <section class="card" id="today">
-      <div class="section-title">🗓️ TODAY</div>
-      <div class="row"><span>TSC vs Cukaricki</span><strong>18:00</strong></div>
-      <div class="row"><span>Novi Pazar vs Napredak</span><strong>20:00</strong></div>
-      <div class="row"><span>IMT vs Mladost</span><strong>20:30</strong></div>
-    </section>
-
-    <section class="card" id="tables">
-      <div class="section-title">📊 SUPERLIGA TABLE</div>
-      <div class="row"><span>1. Red Star</span><strong>65</strong></div>
-      <div class="row"><span>2. Partizan</span><strong>59</strong></div>
-      <div class="row"><span>3. TSC</span><strong>50</strong></div>
-      <div class="row"><span>4. Cukaricki</span><strong>45</strong></div>
-    </section>
-
-    <section class="card" id="news">
-      <div class="section-title">📰 LATEST NEWS</div>
-      <div id="newsList" class="news-list">
-        <div class="news-item">Loading football headlines…</div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="bottom-nav">
-    <a href="#">Home</a>
-    <a href="#tables">Tables</a>
-    <a href="#clubs">Clubs</a>
-    <a href="#news">News</a>
-  </footer>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
