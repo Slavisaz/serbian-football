@@ -2,27 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Serbian Football</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
 </head>
+
 <body>
-  <div class="page-shell">
-    <header class="top-header">
+
+<header class="top-header">
+
   <div class="top-bar">
     <div class="menu-icon">☰</div>
 
     <div class="logo-wrap">
-      <img src="logo.svg" class="main-logo" />
+      <img src="logo.png" alt="Serbian Football" class="main-logo"/>
       <span class="main-title">SERBIAN FOOTBALL</span>
     </div>
 
     <div class="header-meta">
       <span class="status-dot"></span>
-      <span id="refreshLabel">Loading live data…</span>
+      <span id="refreshLabel">Loading...</span>
     </div>
   </div>
 
@@ -33,80 +34,52 @@
     <a href="#">NEWS</a>
     <a href="#">CLUBS</a>
   </nav>
+
 </header>
 
-    <main>
-      <section class="hero-grid">
-        <article class="hero-card main-hero">
-          <div class="card-label">LIVE MATCH CENTER</div>
-          <h1>Real Serbian football scores, fixtures, standings and AI match updates.</h1>
-          <p class="hero-copy">
-            Powered by API-FOOTBALL data and filtered Serbian football headlines.
-          </p>
-          <div id="ticker" class="ticker">Preparing live ticker…</div>
-        </article>
+<main class="container">
 
-        <article class="hero-card ai-card">
-          <div class="card-label">LIVE AI WIDGET</div>
-          <h2>AI Match Pulse</h2>
-          <p id="aiSummary" class="ai-summary">Waiting for live match intelligence…</p>
-          <div id="aiChips" class="chip-row"></div>
-        </article>
-      </section>
+  <section class="hero">
+    <h1>Serbian Football Live</h1>
+    <p>Scores, fixtures, standings and AI updates.</p>
+  </section>
 
-      <section class="dashboard-grid">
-        <article class="panel live-panel">
-          <div class="panel-title-row">
-            <h2>Live</h2>
-            <span id="liveCount" class="panel-badge">0 matches</span>
-          </div>
-          <div id="liveList" class="stack-list"></div>
-        </article>
+  <section class="grid">
 
-        <article class="panel fixtures-panel">
-          <div class="panel-title-row">
-            <h2>Today / Next</h2>
-            <span class="panel-badge">SuperLiga</span>
-          </div>
-          <div id="fixturesList" class="stack-list compact-list"></div>
-        </article>
-      </section>
+    <div class="card">
+      <h2>Live Matches</h2>
+      <div id="liveList">Loading...</div>
+    </div>
 
-      <section class="content-grid">
-        <article class="panel standings-panel">
-          <div class="panel-title-row">
-            <h2>SuperLiga Table</h2>
-            <span class="panel-badge">Top positions</span>
-          </div>
-          <div id="standingsTable" class="table-wrap"></div>
-        </article>
+    <div class="card">
+      <h2>Today / Next</h2>
+      <div id="fixturesList">Loading...</div>
+    </div>
 
-        <aside class="right-rail">
-          <article class="panel teams-panel">
-            <div class="panel-title-row">
-              <h2>Main Teams</h2>
-              <span class="panel-badge">4 clubs</span>
-            </div>
-            <div id="teamsGrid" class="teams-grid"></div>
-          </article>
+    <div class="card full">
+      <h2>SuperLiga Table</h2>
+      <div id="standingsTable">Loading...</div>
+    </div>
 
-          <article class="panel news-panel">
-            <div class="panel-title-row">
-              <h2>Latest News</h2>
-              <span class="panel-badge">Filtered</span>
-            </div>
-            <div id="featuredStory" class="featured-story"></div>
-            <div id="newsList" class="news-list"></div>
-          </article>
-        </aside>
-      </section>
-    </main>
-  </div>
+    <div class="card">
+      <h2>Main Teams</h2>
+      <div id="teamsGrid">Loading...</div>
+    </div>
 
- <script>
+    <div class="card">
+      <h2>Latest News</h2>
+      <div id="newsList">Loading...</div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
 window.SERBIAN_FOOTBALL_API_BASE = 'https://serbian-football-api.slavisa-cf8.workers.dev';
 </script>
-  <script src="app.js"></script>
+
+<script src="app.js"></script>
 
 </body>
 </html>
