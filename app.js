@@ -124,7 +124,7 @@ function renderStandings(standings = []) {
         </tr>
       </thead>
       <tbody>
-        ${standings.slice(0, 8).map((row) => `
+        ${standings.map((row) => `
           <tr>
             <td class="rank">${escapeHtml(String(row.rank ?? ''))}</td>
             <td>
