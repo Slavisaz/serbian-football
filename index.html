@@ -2,34 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Serbian Football</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="brand-wrap">
+        <img src="logo.svg" alt="Serbian Football" class="brand-logo" />
+        <div>
+          <div class="eyebrow">AI AUTO PORTAL</div>
+          <div class="brand-title">Serbian Football</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <span class="status-dot"></span>
+        <span id="refreshLabel">Loading live data…</span>
+      </div>
+    </header>
 
-<header class="header">
-  <div class="logo">SERBIAN FOOTBALL ⚽</div>
-</header>
+    <main>
+      <section class="hero-grid">
+        <article class="hero-card main-hero">
+          <div class="card-label">LIVE MATCH CENTER</div>
+          <h1>Real Serbian football scores, fixtures, standings and AI match updates.</h1>
+          <p class="hero-copy">
+            Powered by API-FOOTBALL data and filtered Serbian football headlines.
+          </p>
+          <div id="ticker" class="ticker">Preparing live ticker…</div>
+        </article>
 
-<div id="ticker" class="ticker"></div>
+        <article class="hero-card ai-card">
+          <div class="card-label">LIVE AI WIDGET</div>
+          <h2>AI Match Pulse</h2>
+          <p id="aiSummary" class="ai-summary">Waiting for live match intelligence…</p>
+          <div id="aiChips" class="chip-row"></div>
+        </article>
+      </section>
 
-<section class="hero">
-  <div class="hero-text">
-    <h1>Serbian Football. Live scores, fixtures, tables and latest headlines.</h1>
+      <section class="dashboard-grid">
+        <article class="panel live-panel">
+          <div class="panel-title-row">
+            <h2>Live</h2>
+            <span id="liveCount" class="panel-badge">0 matches</span>
+          </div>
+          <div id="liveList" class="stack-list"></div>
+        </article>
+
+        <article class="panel fixtures-panel">
+          <div class="panel-title-row">
+            <h2>Today / Next</h2>
+            <span class="panel-badge">SuperLiga</span>
+          </div>
+          <div id="fixturesList" class="stack-list compact-list"></div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel standings-panel">
+          <div class="panel-title-row">
+            <h2>SuperLiga Table</h2>
+            <span class="panel-badge">Top positions</span>
+          </div>
+          <div id="standingsTable" class="table-wrap"></div>
+        </article>
+
+        <aside class="right-rail">
+          <article class="panel teams-panel">
+            <div class="panel-title-row">
+              <h2>Main Teams</h2>
+              <span class="panel-badge">4 clubs</span>
+            </div>
+            <div id="teamsGrid" class="teams-grid"></div>
+          </article>
+
+          <article class="panel news-panel">
+            <div class="panel-title-row">
+              <h2>Latest News</h2>
+              <span class="panel-badge">Filtered</span>
+            </div>
+            <div id="featuredStory" class="featured-story"></div>
+            <div id="newsList" class="news-list"></div>
+          </article>
+        </aside>
+      </section>
+    </main>
   </div>
-  <div class="hero-side">
-    <h3>Featured Story</h3>
-    <h2 id="featuredTitle"></h2>
-    <p id="featuredSource"></p>
-  </div>
-</section>
 
-<section class="news">
-  <h2>Latest News</h2>
-  <div id="newsList"></div>
-</section>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
