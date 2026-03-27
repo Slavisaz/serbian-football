@@ -1,15 +1,14 @@
 const CONFIG = {
   apiBase: window.SERBIAN_FOOTBALL_API_BASE || '',
-  leagueId: 286,
-  season: 2025,
-  mainTeamIds: [598, 573, 702, 2633],
+  leagueId: 4671,
+  season: '2025-2026',
   refreshMs: 60000,
 };
 
 const qs = (id) => document.getElementById(id);
 
 function escapeHtml(value = '') {
-  return value
+  return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -20,7 +19,8 @@ function escapeHtml(value = '') {
 function formatStatus(fixture) {
   const status = fixture?.fixture?.status;
   if (!status) return 'Scheduled';
-  return status.elapsed ? `${status.short} • ${status.elapsed}'` : status.long || status.short;
+  if (status.elapsed) return `${status.short || 'LIVE'} • ${status.elapsed}'`;
+  return status.long || status.short || 'Scheduled';
 }
 
 function formatDate(dateString) {
@@ -41,7 +41,7 @@ function renderTicker(items = []) {
     return;
   }
 
-  ticker.innerHTML = items.map(item => escapeHtml(item)).join(' • ');
+  ticker.innerHTML = items.map((item) => escapeHtml(item)).join(' • ');
 }
 
 function renderLive(fixtures = []) {
@@ -53,32 +53,32 @@ function renderLive(fixtures = []) {
     return;
   }
 
-  root.innerHTML = fixtures.map(match => {
-    const home = match.teams.home;
-    const away = match.teams.away;
-    const goals = match.goals;
+  root.innerHTML = fixtures.map((match) => {
+    const home = match.teams.home || {};
+    const away = match.teams.away || {};
+    const goals = match.goals || {};
 
     return `
       <article class="match-card">
         <div class="match-top">
           <span class="match-status">${escapeHtml(formatStatus(match))}</span>
-          <span class="team-meta">${escapeHtml(match.fixture.venue?.city || match.league?.round || 'Serbia')}</span>
+          <span class="team-meta">${escapeHtml(match.fixture?.round || match.league?.name || 'Serbia')}</span>
         </div>
         <div class="match-body">
           <div class="team-block">
-            <img class="team-logo" src="${escapeHtml(home.logo || '')}" alt="${escapeHtml(home.name)}" />
+            <img class="team-logo" src="${escapeHtml(home.logo || '')}" alt="${escapeHtml(home.name || 'Home')}" />
             <div>
-              <div class="team-name">${escapeHtml(home.name)}</div>
-              <div class="team-meta">${escapeHtml(match.fixture.venue?.name || 'Home')}</div>
+              <div class="team-name">${escapeHtml(home.name || 'Home')}</div>
+              <div class="team-meta">${escapeHtml(match.fixture?.venue?.name || 'Home')}</div>
             </div>
           </div>
           <div class="score-box">${goals.home ?? 0} - ${goals.away ?? 0}</div>
           <div class="team-block away">
             <div>
-              <div class="team-name">${escapeHtml(away.name)}</div>
-              <div class="team-meta">${escapeHtml(match.fixture.status?.long || '')}</div>
+              <div class="team-name">${escapeHtml(away.name || 'Away')}</div>
+              <div class="team-meta">${escapeHtml(match.fixture?.status?.short || '')}</div>
             </div>
-            <img class="team-logo" src="${escapeHtml(away.logo || '')}" alt="${escapeHtml(away.name)}" />
+            <img class="team-logo" src="${escapeHtml(away.logo || '')}" alt="${escapeHtml(away.name || 'Away')}" />
           </div>
         </div>
       </article>
@@ -93,13 +93,13 @@ function renderFixtures(fixtures = []) {
     return;
   }
 
-  root.innerHTML = fixtures.map(match => `
+  root.innerHTML = fixtures.map((match) => `
     <article class="fixture-card">
       <div class="fixture-top">
-        <strong>${escapeHtml(match.teams.home.name)} vs ${escapeHtml(match.teams.away.name)}</strong>
-        <span class="fixture-when">${escapeHtml(formatDate(match.fixture.date))}</span>
+        <strong>${escapeHtml(match.teams?.home?.name || 'Home')} vs ${escapeHtml(match.teams?.away?.name || 'Away')}</strong>
+        <span class="fixture-when">${escapeHtml(formatDate(match.fixture?.date))}</span>
       </div>
-      <div class="fixture-when">${escapeHtml(match.league.round || 'SuperLiga')} · ${escapeHtml(match.fixture.venue?.name || 'Venue TBC')}</div>
+      <div class="fixture-when">${escapeHtml(match.fixture?.round || 'SuperLiga')} · ${escapeHtml(match.fixture?.venue?.name || 'Venue TBC')}</div>
     </article>
   `).join('');
 }
@@ -124,18 +124,18 @@ function renderStandings(standings = []) {
         </tr>
       </thead>
       <tbody>
-        ${standings.slice(0, 8).map(row => `
+        ${standings.slice(0, 8).map((row) => `
           <tr>
-            <td class="rank">${row.rank}</td>
+            <td class="rank">${escapeHtml(String(row.rank ?? ''))}</td>
             <td>
               <div class="team-block">
-                <img class="team-logo" src="${escapeHtml(row.team.logo || '')}" alt="${escapeHtml(row.team.name)}" />
-                <span class="team-name">${escapeHtml(row.team.name)}</span>
+                <img class="team-logo" src="${escapeHtml(row.team?.logo || row.team?.badge || '')}" alt="${escapeHtml(row.team?.name || '')}" />
+                <span class="team-name">${escapeHtml(row.team?.name || '')}</span>
               </div>
             </td>
-            <td>${row.all.played}</td>
-            <td><strong>${row.points}</strong></td>
-            <td>${row.goalsDiff}</td>
+            <td>${escapeHtml(String(row.played ?? 0))}</td>
+            <td><strong>${escapeHtml(String(row.points ?? 0))}</strong></td>
+            <td>${escapeHtml(String(row.goalDiff ?? 0))}</td>
             <td>${escapeHtml(row.form || '-')}</td>
           </tr>
         `).join('')}
@@ -151,16 +151,16 @@ function renderTeams(teams = []) {
     return;
   }
 
-  root.innerHTML = teams.map(team => `
+  root.innerHTML = teams.map((team) => `
     <article class="team-card">
       <div class="team-card-top">
-        <img class="team-logo" src="${escapeHtml(team.logo || '')}" alt="${escapeHtml(team.name)}" />
+        <img class="team-logo" src="${escapeHtml(team.logo || '')}" alt="${escapeHtml(team.name || '')}" />
         <div>
-          <div class="team-name">${escapeHtml(team.name)}</div>
-          <div class="team-meta">${escapeHtml(team.venue?.city || 'Serbia')}</div>
+          <div class="team-name">${escapeHtml(team.name || '')}</div>
+          <div class="team-meta">Rank ${escapeHtml(String(team.rank ?? '-'))} · ${escapeHtml(String(team.points ?? 0))} pts</div>
         </div>
       </div>
-      <div class="team-form">${escapeHtml(team.code || 'SRB')} · ID ${escapeHtml(String(team.id || ''))}</div>
+      <div class="team-form">${escapeHtml(team.form || '-')}</div>
     </article>
   `).join('');
 }
@@ -178,15 +178,15 @@ function renderNews(items = []) {
   const [first, ...rest] = items;
   featured.innerHTML = `
     <a class="story-card featured" href="${escapeHtml(first.link || '#')}" target="_blank" rel="noopener noreferrer">
-      <div class="story-title">${escapeHtml(first.title)}</div>
+      <div class="story-title">${escapeHtml(first.title || '')}</div>
       <div class="story-summary">${escapeHtml(first.summary || 'Latest Serbian football update.')}</div>
       <div class="news-source">${escapeHtml(first.source || 'Source')} · ${escapeHtml(first.pubDate || '')}</div>
     </a>
   `;
 
-  list.innerHTML = rest.slice(0, 5).map(item => `
+  list.innerHTML = rest.slice(0, 5).map((item) => `
     <a class="story-card" href="${escapeHtml(item.link || '#')}" target="_blank" rel="noopener noreferrer">
-      <div class="story-title">${escapeHtml(item.title)}</div>
+      <div class="story-title">${escapeHtml(item.title || '')}</div>
       <div class="news-source">${escapeHtml(item.source || 'Source')}</div>
     </a>
   `).join('');
@@ -194,7 +194,7 @@ function renderNews(items = []) {
 
 function renderAI(ai = {}) {
   qs('aiSummary').textContent = ai.summary || 'AI insight will appear when live data is available.';
-  qs('aiChips').innerHTML = (ai.chips || []).map(chip => `<span class="chip">${escapeHtml(chip)}</span>`).join('');
+  qs('aiChips').innerHTML = (ai.chips || []).map((chip) => `<span class="chip">${escapeHtml(chip)}</span>`).join('');
 }
 
 function setRefreshLabel() {
@@ -203,7 +203,7 @@ function setRefreshLabel() {
 
 async function loadPortal() {
   try {
-    const url = `${CONFIG.apiBase}/api/portal?league=${CONFIG.leagueId}&season=${CONFIG.season}&teams=${CONFIG.mainTeamIds.join(',')}`;
+    const url = `${CONFIG.apiBase}/api/portal?league=${CONFIG.leagueId}&season=${encodeURIComponent(CONFIG.season)}&v=${Date.now()}`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -212,8 +212,8 @@ async function loadPortal() {
     }
 
     const tickerItems = [
-      ...(data.live || []).slice(0, 3).map(match => `${match.teams.home.name} ${match.goals.home ?? 0}-${match.goals.away ?? 0} ${match.teams.away.name}`),
-      ...(data.news?.items || []).slice(0, 4).map(item => item.title),
+      ...(data.live || []).slice(0, 3).map((match) => `${match.teams.home.name} ${match.goals.home ?? 0}-${match.goals.away ?? 0} ${match.teams.away.name}`),
+      ...(data.news?.items || []).slice(0, 4).map((item) => item.title),
     ];
 
     renderTicker(tickerItems);
@@ -226,8 +226,8 @@ async function loadPortal() {
     setRefreshLabel();
   } catch (error) {
     console.error(error);
-    qs('ticker').textContent = 'Unable to load live portal data. Check worker deployment and API key.';
-    qs('aiSummary').textContent = error.message;
+    qs('ticker').textContent = 'Unable to load live portal data. Check worker deployment.';
+    qs('aiSummary').textContent = error.message || 'Live data unavailable.';
   }
 }
 
