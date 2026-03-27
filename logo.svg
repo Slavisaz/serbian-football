@@ -1,14 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Serbian Football logo">
+<svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Serbian Football logo">
   <defs>
-    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#b66dff"/>
-      <stop offset="100%" stop-color="#5da9ff"/>
+    <radialGradient id="metal" cx="35%" cy="30%" r="75%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#e7e7eb"/>
+      <stop offset="70%" stop-color="#bfc3ca"/>
+      <stop offset="100%" stop-color="#8d929d"/>
+    </radialGradient>
+    <radialGradient id="glass" cx="30%" cy="20%" r="70%">
+      <stop offset="0%" stop-color="#ff8087" stop-opacity=".85"/>
+      <stop offset="45%" stop-color="#ec1833" stop-opacity=".95"/>
+      <stop offset="100%" stop-color="#a40013"/>
+    </radialGradient>
+    <linearGradient id="flagBlue" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0f3c9d"/>
+      <stop offset="100%" stop-color="#274eaf"/>
     </linearGradient>
   </defs>
-  <circle cx="60" cy="60" r="54" fill="url(#g)" stroke="#ffffff" stroke-width="4"/>
-  <path d="M60 24 75 35 70 53 50 53 45 35Z" fill="#fff" opacity=".95"/>
-  <path d="M28 53 43 44 50 53 43 73 28 67Z" fill="#fff" opacity=".95"/>
-  <path d="M92 53 77 44 70 53 77 73 92 67Z" fill="#fff" opacity=".95"/>
-  <path d="M60 92 75 81 70 63 50 63 45 81Z" fill="#fff" opacity=".95"/>
-  <circle cx="60" cy="58" r="8" fill="#e21f33"/>
+
+  <circle cx="110" cy="110" r="104" fill="url(#metal)"/>
+  <circle cx="110" cy="110" r="96" fill="url(#glass)" stroke="#f7f7f8" stroke-width="2"/>
+
+  <path d="M25 108c18-24 43-39 70-46v28c-20 6-38 17-53 32-6-3-11-8-17-14z" fill="#ffffff" opacity=".96"/>
+  <path d="M195 108c-18-24-43-39-70-46v28c20 6 38 17 53 32 6-3 11-8 17-14z" fill="#ffffff" opacity=".96"/>
+  <path d="M28 114c20 18 43 30 67 35v30c-29-8-53-20-71-43 1-8 2-14 4-22z" fill="url(#flagBlue)" opacity=".95"/>
+  <path d="M192 114c-20 18-43 30-67 35v30c29-8 53-20 71-43-1-8-2-14-4-22z" fill="url(#flagBlue)" opacity=".95"/>
+
+  <ellipse cx="110" cy="110" rx="26" ry="30" fill="#c90f22" stroke="#f7d474" stroke-width="2"/>
+  <path d="M93 122h34v5H93z" fill="#f7d474"/>
+  <path d="M108 86h4v48h-4z" fill="#f7d474"/>
+  <path d="M102 98h16v4h-16zM98 110h24v4H98z" fill="#f7d474"/>
+
+  <path d="M94 76c5-7 11-12 16-12s11 5 16 12c-2 2-4 3-7 4-3-4-6-6-9-6s-6 2-9 6c-3-1-5-2-7-4z" fill="#f7d474"/>
+  <circle cx="94" cy="111" r="4" fill="#f7d474"/>
+  <circle cx="126" cy="111" r="4" fill="#f7d474"/>
+
+  <ellipse cx="110" cy="40" rx="26" ry="8" fill="#9c0e19" opacity=".25"/>
 </svg>
